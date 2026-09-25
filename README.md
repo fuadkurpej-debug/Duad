@@ -3,7 +3,7 @@
 Branding, vodiči i alati za YouTube kanal **Fuego Clipping** (klipovi / Shorts).
 
 - [`docs/fuego-clipping.md`](docs/fuego-clipping.md): kako promijeniti kanal (ime, handle, slike, opis) i kako legalno raditi klipove
-- [`branding/`](branding/): logo (`logo.png`, 800×800) i baner (`banner.png`, 2560×1440)
+- [`branding/`](branding/): logo (`logo.png`, 800×800) i baner na bosanskom (`banner.png`) ili engleskom (`banner-en.png`), 2560×1440
 
 Stariji materijali za YT Kids:
 
