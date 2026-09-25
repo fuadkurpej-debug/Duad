@@ -1,12 +1,17 @@
-# Duad: YT Kids Shorts
+# Duad: Fuego Clipping 🔥
 
-Alati i materijali za pravljenje i objavu **vlastitih** dječijih YouTube Shorts-a.
+Branding, vodiči i alati za YouTube kanal **Fuego Clipping** (klipovi / Shorts).
+
+- [`docs/fuego-clipping.md`](docs/fuego-clipping.md): kako promijeniti kanal (ime, handle, slike, opis) i kako legalno raditi klipove
+- [`branding/`](branding/): logo (`logo.png`, 800×800) i baner (`banner.png`, 2560×1440)
+
+Stariji materijali za YT Kids:
 
 - [`docs/istrazivanje.md`](docs/istrazivanje.md): koji formati skupljaju najviše pregleda i koja pravila vrijede (Made for Kids, monetizacija, copyright)
 - [`docs/scenariji.md`](docs/scenariji.md): 10 gotovih scenarija za snimanje
 - [`upload/upload_short.py`](upload/upload_short.py): skripta za objavu Short-a preko YouTube Data API-ja
 
-> ⚠️ Objavljuj samo video koji si sam snimio/napravio, uz muziku na koju imaš prava.
+> ⚠️ Objavljuj samo video koji si sam snimio/napravio ili klip za koji imaš dozvolu autora, uz muziku na koju imaš prava.
 > Reupload tuđih videa donosi copyright strike-ove (3 = brisanje kanala).
 
 ## Postavljanje skripte za upload (jednom)
@@ -35,11 +40,14 @@ python upload_short.py moj_video.mp4 \
   --description "Učimo boje miješanjem plastelina." \
   --tags boje zadjecu plastelin učimoboje \
   --privacy private \
+  --for-kids \
   --i-own-this
 ```
 
 - Pri prvom pokretanju otvara se preglednik za Google prijavu. Izaberi kanal.
-- Video se **uvijek** označava kao *Made for Kids* (COPPA).
+- Obavezno izaberi publiku: `--for-kids` (dječiji sadržaj, COPPA) ili
+  `--not-for-kids` (npr. klipovi sa streamova i podcasta).
+- Podrazumijevana kategorija je 24 (Entertainment); za edukativni sadržaj dodaj `--category 27`.
 - `#Shorts` se automatski dodaje u naslov.
 - Podrazumijevano je `private`. Pregledaj video u YouTube Studiju pa ga tamo
   prebaci na *Public* (ili odmah koristi `--privacy public`).

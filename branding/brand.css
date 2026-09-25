@@ -1,0 +1,4 @@
+@font-face { font-family: Anton; src: url(Anton-Regular.ttf); }
+:root { --bg:#0b0b0d; --fire1:#ffd23f; --fire2:#ff7a00; --fire3:#e3170a; --text:#fff; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); font-family:Anton, sans-serif; color:var(--text); overflow:hidden; }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Objavi VLASTITI video kao YouTube Short označen kao "Made for Kids".
+"""Objavi VLASTITI video (ili klip za koji imaš dozvolu) kao YouTube Short.
 
 Koristi YouTube Data API v3 (videos.insert). Pri prvom pokretanju otvara se
 preglednik za Google prijavu; token se čuva u token.json za sljedeće puta.
@@ -9,7 +9,7 @@ Primjer:
         --title "Plava + žuta = ? 🎨" \
         --description "Učimo boje miješanjem plastelina." \
         --tags boje zadjecu plastelin \
-        --privacy private
+        --privacy private --for-kids --i-own-this
 """
 
 import argparse
@@ -34,7 +34,7 @@ TOKEN = HERE / "token.json"
 MAX_SHORT_SECONDS = 180
 MAX_TITLE_LEN = 100
 # YouTube kategorija 27 = Education, 24 = Entertainment
-DEFAULT_CATEGORY = "27"
+DEFAULT_CATEGORY = "24"
 
 
 def get_credentials():
@@ -109,7 +109,7 @@ def build_body(args):
         "status": {
             "privacyStatus": args.privacy,
             # COPPA: sadržaj namijenjen djeci MORA biti označen kao Made for Kids.
-            "selfDeclaredMadeForKids": True,
+            "selfDeclaredMadeForKids": args.for_kids,
             "containsSyntheticMedia": args.synthetic,
         },
     }
@@ -127,12 +127,21 @@ def upload(youtube, path, body):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Objavi vlastiti Made-for-Kids YouTube Short.")
+    parser = argparse.ArgumentParser(description="Objavi vlastiti YouTube Short.")
     parser.add_argument("video", type=Path, help="putanja do tvog videa (.mp4)")
     parser.add_argument("--title", required=True)
     parser.add_argument("--description", default="")
     parser.add_argument("--tags", nargs="*", default=[])
     parser.add_argument("--category", default=DEFAULT_CATEGORY)
+    audience = parser.add_mutually_exclusive_group(required=True)
+    audience.add_argument(
+        "--for-kids", dest="for_kids", action="store_true",
+        help="video je namijenjen djeci (Made for Kids, COPPA)",
+    )
+    audience.add_argument(
+        "--not-for-kids", dest="for_kids", action="store_false",
+        help="video NIJE namijenjen djeci (npr. klipovi sa streamova/podcasta)",
+    )
     parser.add_argument("--language", default="bs")
     parser.add_argument(
         "--privacy", choices=["private", "unlisted", "public"], default="private",
@@ -144,7 +153,7 @@ def main():
     )
     parser.add_argument(
         "--i-own-this", action="store_true", required=True,
-        help="potvrda da je video tvoj originalni sadržaj i da imaš prava na muziku",
+        help="potvrda da je video tvoj ili imaš dozvolu autora, i da imaš prava na muziku",
     )
     args = parser.parse_args()
 
@@ -160,7 +169,7 @@ def main():
 
     video_id = response["id"]
     print(f"Objavljeno ({args.privacy}): https://youtube.com/shorts/{video_id}")
-    print("Provjeri u YouTube Studiju da je 'Made for Kids' postavljeno i da nema copyright upozorenja.")
+    print("Provjeri u YouTube Studiju publiku (Made for Kids) i da nema copyright upozorenja.")
 
 
 if __name__ == "__main__":

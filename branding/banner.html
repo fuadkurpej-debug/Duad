@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+body{width:2560px;height:1440px;position:relative;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 100%,rgba(227,23,10,.55),transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 50%,rgba(255,122,0,.18),transparent 70%),
+    #0b0b0d;}
+/* filmstrip stripes top and bottom */
+.strip{position:absolute;left:0;right:0;height:70px;background:
+  repeating-linear-gradient(90deg,#1b1b1f 0 60px,transparent 60px 90px);opacity:.9}
+.strip.t{top:120px}.strip.b{bottom:120px}
+/* 1546x423 safe area, centered */
+.safe{position:absolute;left:507px;top:508px;width:1546px;height:423px;
+  display:flex;align-items:center;justify-content:center;gap:48px;}
+img{height:320px;filter:drop-shadow(0 0 50px rgba(255,110,0,.6));}
+.txt{display:flex;flex-direction:column;}
+.name{font-size:172px;line-height:.95;letter-spacing:8px;
+  background:linear-gradient(180deg,#ffe066,#ff7a00 60%,#e3170a);-webkit-background-clip:text;color:transparent;}
+.name span{color:#fff;-webkit-text-fill-color:#fff;}
+.tag{font-size:46px;letter-spacing:10px;color:#ffb36b;margin-top:10px;}
+</style></head><body>
+<div class="strip t"></div><div class="strip b"></div>
+<div class="safe"><img src="flame.svg"><div class="txt"><div class="name">FUEGO <span>CLIPPING</span></div>
+<div class="tag">NAJVRELIJI MOMENTI · SVAKI DAN</div></div></div>
+</body></html>
