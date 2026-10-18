@@ -5134,6 +5134,7 @@ function fail(msg) {
   Sound.pause(); Sound.stopAll();
   if (recorder && recorder.state === 'recording') recorder.stop();
   ui.overlay.classList.remove('hidden');
+  ui.overlay.tabIndex = -1;
   window.__adFailed = false;
   window.__adFail(msg);
   [ui.play, ui.restart, ui.scrub, ui.rec].forEach(el => (el.disabled = true));
@@ -5144,6 +5145,7 @@ function play() {
   if (t >= DUR - 0.01) t = 0;
   playing = true; dirty = true;
   ui.overlay.classList.add('hidden');
+  ui.overlay.tabIndex = -1;
   Sound.init();
   if (Sound.ctx) { Sound.resume(); Sound.play(t); }
   last = performance.now();
@@ -5197,7 +5199,8 @@ function setQuality(q) {
 }
 
 // Inside the claude.ai viewer, files are saved through its downloads capability; elsewhere a normal download link is used.
-const inViewer = !!(window.claude && typeof window.claude.use === 'function');
+const framed = (() => { try { return window.top !== window; } catch (e) { return true; } })();
+const inViewer = framed && !!(window.claude && typeof window.claude.use === 'function');
 let downloadsApi = null;
 const downloadsReady = inViewer
   ? window.claude.use('downloads').then(d => { downloadsApi = d; }, () => {})
@@ -5247,6 +5250,7 @@ async function exportVideo() {
     ui.rec.innerHTML = REC_LABEL;
     if (!broken) [ui.play, ui.restart, ui.scrub, ui.quality].forEach(el => (el.disabled = false));
     if (blob.size) saveVideo(`luxury-construction-commercial-${H}p.${type.includes('mp4') ? 'mp4' : 'webm'}`, blob);
+    else note('The recording came out empty. Try again in a current Chrome, Edge or Firefox.');
   };
   [ui.play, ui.restart, ui.scrub, ui.quality].forEach(el => (el.disabled = true));
   ui.rec.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12"><rect x="6" y="6" width="12" height="12"/></svg>Stop';
@@ -5259,7 +5263,7 @@ async function exportVideo() {
 ui.play.onclick = () => (playing ? pause() : play());
 ui.restart.onclick = restart;
 ui.overlay.onclick = play;
-ui.overlay.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+ui.overlay.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); play(); } });
 ui.scrub.addEventListener('pointerdown', () => (scrubbing = true));
 ['pointerup', 'pointercancel', 'change', 'blur'].forEach(ev => ui.scrub.addEventListener(ev, () => (scrubbing = false)));
 // Pause when the tab is hidden (picture and sound would drift apart otherwise)
