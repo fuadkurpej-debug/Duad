@@ -1,0 +1,8 @@
+Shipping zones in My Store 2,,,,,
+Checked 26 Oct 2026. Rates marked placeholder must be replaced with supplier quotes before the US and EU markets are activated.,,,,,
+,,,,,
+Zone,Countries,Rate now,Market status,What to set,Locations
+Domestic,ME,€9.60 Standard,Montenegro market active,Confirm the rate,Own store location; cjdropshipping
+United States,US,€17.00 Standard shipping (placeholder),United States market is a draft,Replace with CJ or Selfnamed US quote; add delivery estimates per product,Own store location; cjdropshipping
+European Union,"AT, BE, BG, CY, CZ, DE, DK, EE, ES, FI, FR, GR, HR, HU, IE, IT, LT, LU, LV, MT, NL, PL, PT, RO, SE, SI, SK",€17.00 Standard shipping (placeholder),European Union market is a draft,"Replace with EU quote; BG, HR, CY, EE, GR, HU, LV, LT, LU, MT, RO, SK and SI were added today",Own store location; cjdropshipping
+International,"AE, AU, CA, CH, GB, HK, IL, JP, KR, MY, NO, NZ, SG",€17.00 International,Not in any active market,Keep for later or remove,Own store location; cjdropshipping

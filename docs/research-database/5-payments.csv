@@ -1,0 +1,12 @@
+Payment provider options,,,,,,
+Nothing here has been activated. Availability for Montenegro comes from secondary sources and must be confirmed with each provider.,,,,,,
+,,,,,,
+Option,Works for a Montenegro seller?,Needs a registered business?,Several currencies?,Notes,Source,Status
+PayPal (built into Shopify),Reported as supported (third-party guide); official list not checked,A business account asks for business details,"Yes, PayPal converts",Lowest-effort first option; check fees for international payments,https://www.zenind.com/help/post/how-to-open-a-paypal-account-in-montenegro-in-2026,Check first
+Shopify Payments,Montenegro not found on any list,Yes,Yes,Would need a business in a supported country,https://www.cs-cart.com/blog/shopify-payments-supported-countries/,Not available (unconfirmed)
+Stripe,Montenegro not found on any list,Yes,Yes,Not an option for a Montenegro business,https://redstagfulfillment.com/how-many-countries-does-stripe-operate-in/,Not available (unconfirmed)
+US company via Stripe Atlas,Non-US founders can form a Delaware LLC or C corp,Creates one (paid service),Yes,Whether Shopify Payments then accepts a non-US resident is not confirmed,https://docs.stripe.com/atlas,Your decision (paid)
+AllSecure Global (Shopify app),Montenegro not among the markets named; ask the provider,Yes,Not checked,Minimum annual fee plus usage fees per its app listing,https://apps.shopify.com/allsecure-global,Ask provider
+Card acquiring through a Montenegrin bank,Possible after registration if a Shopify-compatible gateway supports the bank,Yes,Not checked,Ask your bank which gateways it works with,https://cartdna.com/en-gb/shopify-payment-guide/europe/montenegro,After registration
+Bank transfer (manual payment in Shopify),Yes,No,No,Low conversion; fine for test orders only,Shopify manual payment methods,Testing only
+Shopify Bogus Gateway,"Yes, test mode only",No,Not applicable,Place test orders without charges,Shopify test orders,Use for testing

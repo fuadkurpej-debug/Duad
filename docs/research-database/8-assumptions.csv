@@ -1,0 +1,17 @@
+Margin assumptions,,
+"Blue values are inputs. The Products tab uses them for the suggested price, profit and margin.",,
+,,
+Input,Value,Source
+Payment fee (% of price),3.0%,Placeholder until a payment provider is chosen
+Payment fixed fee per order (€),€0.30,Placeholder until a payment provider is chosen
+Refunds and damages reserve (% of price),3.0%,Planning assumption
+Marketing cost per order (€),€8.00,Planning assumption. Replace with your real ad cost per order.
+Target margin after marketing (%),25.0%,Planning assumption
+,,
+Worked example (not a real product),,
+Unit cost (€),€7.50,Example input
+Shipping cost (€),€6.00,Example input
+Suggested price for target margin (€),€31.59,
+Planned price (€),€34.00,Example input
+Profit per order after marketing (€),€10.16,
+Margin after marketing,29.9%,

@@ -10,6 +10,9 @@ Shopify theme and project documents for **Skin & Beauty**, a curated skincare, b
 | `docs/supplier-import-guide.md` | How to import CJ Dropshipping, Syncee or Selfnamed products so they land in the right collections and look right |
 | `docs/store-configuration.md` | Record of the store setup: markets, shipping zones, collections, menu, product fields |
 | `docs/sourcing-report.html` | Supplier comparison, product shortlist, margin calculator, compliance notes and approval checklist (open in a browser) |
+| `docs/research-database/` | Export of the Google Sheet research database, one CSV per tab: products, suppliers, compliance, inquiries, payments, automation, shipping, assumptions |
+| `docs/inquiries.md` | Ready-to-send messages to brands, suppliers and EU compliance services (not sent yet) |
+| `docs/project-log.md` | What was asked and what was done in each step of the project, with open items |
 
 ## Using the theme
 
