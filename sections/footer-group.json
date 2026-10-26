@@ -1,0 +1,75 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "brand",
+          "settings": {
+            "text": "<p>Curated skincare, body and beauty essentials — chosen for beautiful textures, considered formulas and rituals that feel like a pause in your day.</p>"
+          }
+        },
+        "menu-shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop"
+          }
+        },
+        "menu-help": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer-help"
+          }
+        },
+        "care": {
+          "type": "contact",
+          "settings": {
+            "heading": "Customer care",
+            "link": "/pages/contact",
+            "link_label": "Send us a message"
+          },
+          "disabled": true
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "The Skin & Beauty letter",
+            "text": "<p>Routine notes, new arrivals and stories from the journal.</p>",
+            "fine_print": "<p>By subscribing you agree to receive marketing emails. Unsubscribe anytime. See our <a href=\"/policies/privacy-policy\">privacy policy</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "brand",
+        "menu-shop",
+        "menu-help",
+        "care",
+        "newsletter"
+      ],
+      "settings": {
+        "color_scheme": "scheme-4",
+        "show_wordmark": true,
+        "show_policies": true,
+        "show_localization": true,
+        "show_payment_icons": true,
+        "show_powered_by": false
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

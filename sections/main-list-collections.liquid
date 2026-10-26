@@ -1,0 +1,102 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="page-header page-header--center">
+      <h1 class="h1">{{ section.settings.heading | default: page_title | escape }}</h1>
+      {%- if section.settings.text != blank -%}
+        <div class="page-header__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+    <ul class="grid collection-list" style="--cols-desktop: {{ section.settings.columns_desktop }}; --cols-tablet: 2; --cols-mobile: 1;" role="list">
+      {%- for collection in collections -%}
+        {%- comment -%} Skip the hidden frontpage collection, any collection hidden from search engines (Shopify's seo.hidden) and, on the live store, collections without products yet {%- endcomment -%}
+        {%- assign seo_hidden = collection.metafields.seo.hidden.value | default: collection.metafields.seo.hidden | append: '' -%}
+        {%- if collection.handle == 'frontpage' or seo_hidden == '1' -%}{%- continue -%}{%- endif -%}
+        {%- if collection.all_products_count == 0 and request.design_mode == false -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign order = forloop.index0 | modulo: 3
+          assign image = collection.featured_image
+          assign alt = collection.title | escape
+        -%}
+        <li data-reveal style="--reveal-order: {{ order }};">
+          <a href="{{ collection.url }}" class="category-card">
+            <div class="category-card__media" style="--category-ratio: 4 / 3;">
+              {%- if image -%}
+                {{ image | image_url: width: 1200 | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 100vw', loading: 'lazy', alt: alt }}
+              {%- else -%}
+                {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="category-card__body">
+              <h2 class="category-card__title">
+                <span>{{ collection.title | escape }}</span>
+                <span class="category-card__arrow" aria-hidden="true">{% render 'icon', icon: 'arrow-right' %}</span>
+              </h2>
+              {%- if collection.products_count > 0 -%}
+                <p class="category-card__text">{{ 'collections.product_count' | t: count: collection.products_count }}</p>
+              {%- elsif collection.description != blank -%}
+                <p class="category-card__text">{{ collection.description | strip_html | truncatewords: 14 }}</p>
+              {%- endif -%}
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections list page",
+  "tag": "section",
+  "class": "list-collections-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by collection"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ]
+}
+{% endschema %}

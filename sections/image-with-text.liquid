@@ -1,0 +1,214 @@
+{%- liquid
+  case section.settings.image_ratio
+    when 'square'
+      assign ratio_css = '1 / 1'
+    when 'landscape'
+      assign ratio_css = '4 / 3'
+    when 'tall'
+      assign ratio_css = '3 / 4'
+    else
+      assign ratio_css = '4 / 5'
+  endcase
+  assign image = section.settings.image
+  assign image_2 = section.settings.image_2
+  assign heading_alt = section.settings.heading | strip_html | escape
+-%}
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="image-text{% if section.settings.layout == 'image_right' %} image-text--reverse{% endif %}{% if section.settings.wide_media %} image-text--wide-media{% endif %}">
+      {%- if image_2 != blank -%}
+        <div class="image-text__media image-text__media--stack" data-reveal>
+          <div class="media">
+            {%- assign alt_1 = image.alt | default: heading_alt -%}
+            {%- if image != blank -%}
+              {{ image | image_url: width: 1400 | image_tag: widths: '500, 750, 1000, 1400', sizes: '(min-width: 990px) 40vw, 82vw', loading: 'lazy', alt: alt_1 }}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+          <div class="media">
+            {%- assign alt_2 = image_2.alt | escape -%}
+            {{ image_2 | image_url: width: 900 | image_tag: widths: '300, 500, 700, 900', sizes: '(min-width: 990px) 22vw, 46vw', loading: 'lazy', alt: alt_2 }}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="media image-text__media" style="--media-ratio: {{ ratio_css }};" data-reveal>
+          {%- if image != blank -%}
+            {%- assign alt_1 = image.alt | default: heading_alt -%}
+            {{ image | image_url: width: 1600 | image_tag: widths: '500, 750, 1000, 1300, 1600', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: alt_1 }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="image-text__content" data-reveal style="--reveal-order: 1;">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow eyebrow--line">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="{{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="image-text__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank or section.settings.button_label_2 != blank -%}
+          <div class="button-group">
+            {%- if section.settings.button_label != blank -%}
+              <a href="{{ section.settings.button_link | default: '#' }}" class="button{% if section.settings.button_style == 'secondary' %} button--secondary{% endif %}">{{ section.settings.button_label | escape }}</a>
+            {%- endif -%}
+            {%- if section.settings.button_label_2 != blank -%}
+              <a href="{{ section.settings.button_link_2 | default: '#' }}" class="link">{{ section.settings.button_label_2 | escape }} {% render 'icon', icon: 'arrow-right' %}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "image-with-text-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Second image",
+      "info": "Optional. Creates an elegant overlapping collage."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "tall", "label": "Tall" },
+        { "value": "square", "label": "Square" },
+        { "value": "landscape", "label": "Landscape" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image position on desktop",
+      "options": [
+        { "value": "image_left", "label": "Left" },
+        { "value": "image_right", "label": "Right" }
+      ],
+      "default": "image_left"
+    },
+    {
+      "type": "checkbox",
+      "id": "wide_media",
+      "label": "Wider image column",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Our story"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curated with care. <em>Made with intention.</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Large" },
+        { "value": "h2", "label": "Medium" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Pair text with an image to tell your story.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read our story"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "primary", "label": "Solid" },
+        { "value": "secondary", "label": "Outline" }
+      ],
+      "default": "secondary"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Text link label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Text link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 104
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ]
+}
+{% endschema %}

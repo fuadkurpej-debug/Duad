@@ -1,0 +1,73 @@
+{%- comment -%}
+  Renders a price. Prices, compare-at prices and unit prices always come from Shopify data.
+  Params:
+  - product (required)
+  - variant: render a specific variant instead of the product range
+  - show_compare: default true
+  - show_unit: default true
+  - show_lowest: show the EU "lowest price in 30 days" metafield when on sale
+  - class: extra classes
+{%- endcomment -%}
+{%- liquid
+  if variant
+    assign price = variant.price
+    assign compare_at = variant.compare_at_price
+    assign price_varies = false
+    assign unit_variant = variant
+  else
+    assign price = product.price
+    assign compare_at = product.compare_at_price
+    assign price_varies = product.price_varies
+    assign unit_variant = product.selected_or_first_available_variant
+  endif
+
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+  endif
+
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_compare = compare_at | money_with_currency
+  else
+    assign money_price = price | money
+    assign money_compare = compare_at | money
+  endif
+-%}
+<div class="price{% if on_sale %} price--on-sale{% endif %}{% if class %} {{ class }}{% endif %}">
+  <span class="visually-hidden">
+    {%- if on_sale -%}
+      {{- 'products.product.price.sale_price' | t -}}
+    {%- else -%}
+      {{- 'products.product.price.regular_price' | t -}}
+    {%- endif -%}
+  </span>
+  <span class="price__current">
+    {%- if price_varies -%}
+      {{- 'products.product.price.from_price_html' | t: price: money_price -}}
+    {%- else -%}
+      {{- money_price -}}
+    {%- endif -%}
+  </span>
+  {%- if on_sale and show_compare != false -%}
+    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+    <s class="price__compare">{{ money_compare }}</s>
+  {%- endif -%}
+  {%- if show_unit != false and unit_variant.unit_price_measurement -%}
+    <span class="price__unit">
+      <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      {{- unit_variant.unit_price | money -}}
+      <span aria-hidden="true">/</span>
+      <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+      {%- if unit_variant.unit_price_measurement.reference_value != 1 -%}
+        {{- unit_variant.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{- unit_variant.unit_price_measurement.reference_unit -}}
+    </span>
+  {%- endif -%}
+  {%- if on_sale and show_lowest and product.metafields.custom.lowest_price_30_days != blank -%}
+    <span class="price__lowest">
+      {{- 'products.product.price.lowest_30_days' | t: price: product.metafields.custom.lowest_price_30_days.value -}}
+    </span>
+  {%- endif -%}
+</div>

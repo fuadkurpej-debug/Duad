@@ -1,0 +1,12 @@
+<span class="cart-count" data-cart-render="cart-count">
+  {%- if cart.item_count > 0 -%}
+    <span aria-hidden="true">{{ cart.item_count }}</span><span class="visually-hidden">{{ 'header.cart_count' | t: count: cart.item_count }}</span>
+  {%- endif -%}
+</span>
+
+{% schema %}
+{
+  "name": "Cart count",
+  "settings": []
+}
+{% endschema %}

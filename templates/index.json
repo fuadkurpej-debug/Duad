@@ -1,0 +1,520 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "image": "shopify://shop_images/sb-hero-desktop.jpg",
+        "image_mobile": "shopify://shop_images/sb-hero-mobile-tall.jpg",
+        "height": "large",
+        "animate": true,
+        "overlay_style": "none",
+        "overlay_opacity": 0,
+        "eyebrow": "The Skin & Beauty ritual",
+        "heading": "Skin, softly <em>considered.</em>",
+        "heading_size": "h0",
+        "text": "<p>Curated skincare, body and beauty essentials — chosen for beautiful textures, considered formulas and rituals that feel like a pause in your day.</p>",
+        "button_label_1": "Shop the collection",
+        "button_link_1": "/collections/all",
+        "button_style_1": "primary",
+        "button_label_2": "Discover your ritual",
+        "button_link_2": "/collections/skincare",
+        "button_style_2": "secondary",
+        "desktop_position": "middle-left",
+        "boxed": false,
+        "mobile_layout": "bottom",
+        "mobile_text_alignment": "left",
+        "show_scroll_cue": true,
+        "color_scheme": "scheme-1",
+        "mobile_compact": true
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "item-1": {
+          "type": "item",
+          "settings": {
+            "text": "Skin, softly considered"
+          }
+        },
+        "item-2": {
+          "type": "item",
+          "settings": {
+            "text": "Cleanse · Treat · Moisturize"
+          }
+        },
+        "item-3": {
+          "type": "item",
+          "settings": {
+            "text": "Skincare · Body · Beauty"
+          }
+        },
+        "item-4": {
+          "type": "item",
+          "settings": {
+            "text": "Chosen for texture & feel"
+          }
+        },
+        "item-5": {
+          "type": "item",
+          "settings": {
+            "text": "Rituals worth slowing down for"
+          }
+        }
+      },
+      "block_order": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4",
+        "item-5"
+      ],
+      "settings": {
+        "style": "serif",
+        "separator": "sparkle",
+        "duration": 45,
+        "reverse": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "cat-cleansers": {
+          "type": "category",
+          "settings": {
+            "collection": "facial-cleansers",
+            "image": "shopify://shop_images/sb-category-cleansers.jpg",
+            "title": "Facial Cleansers",
+            "text": "Start fresh, morning and night"
+          }
+        },
+        "cat-serums": {
+          "type": "category",
+          "settings": {
+            "collection": "serums",
+            "image": "shopify://shop_images/sb-category-serums.jpg",
+            "title": "Serums",
+            "text": "Concentrated, targeted care"
+          }
+        },
+        "cat-moisturizers": {
+          "type": "category",
+          "settings": {
+            "collection": "moisturizers",
+            "image": "shopify://shop_images/sb-category-moisturizers.jpg",
+            "title": "Moisturizers",
+            "text": "Lasting softness & comfort"
+          }
+        },
+        "cat-masks": {
+          "type": "category",
+          "settings": {
+            "collection": "face-masks",
+            "image": "shopify://shop_images/sb-category-masks.jpg",
+            "title": "Face Masks",
+            "text": "Your weekly reset"
+          }
+        },
+        "cat-essentials": {
+          "type": "category",
+          "settings": {
+            "collection": "beauty-essentials",
+            "image": "shopify://shop_images/sb-category-essentials.jpg",
+            "title": "Beauty Essentials",
+            "text": "Lips, tools & finishing touches"
+          }
+        }
+      },
+      "block_order": [
+        "cat-cleansers",
+        "cat-serums",
+        "cat-moisturizers",
+        "cat-masks",
+        "cat-essentials"
+      ],
+      "settings": {
+        "eyebrow": "Find your step",
+        "heading": "Shop by <em>ritual</em>",
+        "heading_alignment": "left",
+        "link_label": "View all collections",
+        "link": "/collections",
+        "columns_desktop": 5,
+        "image_ratio": "portrait",
+        "text_style": "below",
+        "mobile_layout": "slider",
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 64
+      }
+    },
+    "bestsellers": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Where to start",
+        "heading": "The <em>essentials</em>",
+        "text": "<p>Cleansers, serums and creams for a simple, considered routine — chosen for their textures, their formulas and how they feel to use.</p>",
+        "heading_alignment": "left",
+        "collection": "skincare",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "desktop_layout": "grid",
+        "mobile_layout": "slider",
+        "show_view_all": true,
+        "view_all_label": "Shop all skincare",
+        "button_below": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 64,
+        "padding_bottom": 104
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "blocks": {
+        "benefit-curated": {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Thoughtfully curated",
+            "text": "<p>Every product is chosen for its texture, its formula and the place it earns in a simple routine.</p>"
+          }
+        },
+        "benefit-honest": {
+          "type": "benefit",
+          "settings": {
+            "icon": "flask",
+            "title": "Honest by design",
+            "text": "<p>Clear product details, costs shown before you pay and only genuine customer reviews — never invented ones.</p>"
+          }
+        },
+        "benefit-secure": {
+          "type": "benefit",
+          "settings": {
+            "icon": "lock",
+            "title": "Secure checkout",
+            "text": "<p>Pay safely through Shopify's encrypted checkout with the payment methods you trust.</p>"
+          }
+        },
+        "benefit-returns": {
+          "type": "benefit",
+          "settings": {
+            "icon": "return",
+            "title": "Easy returns",
+            "text": "<p>Changed your mind? Return unopened products within [30] days — see our returns policy.</p>"
+          },
+          "disabled": true
+        },
+        "benefit-costs": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "title": "Costs shown upfront",
+            "text": "<p>Shipping options and costs appear at checkout, before you pay.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "benefit-curated",
+        "benefit-honest",
+        "benefit-secure",
+        "benefit-returns",
+        "benefit-costs"
+      ],
+      "settings": {
+        "eyebrow": "Why Skin & Beauty",
+        "heading": "Beauty you can <em>trust</em>",
+        "style": "cards",
+        "alignment": "center",
+        "columns": 4,
+        "color_scheme": "scheme-2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "spotlight": {
+      "type": "product-spotlight",
+      "settings": {
+        "product": "dew-drop-hydrating-serum",
+        "image": "shopify://shop_images/sb-spotlight.jpg",
+        "image_ratio": "square",
+        "layout": "image_left",
+        "seal_text": "Skin & Beauty · Signature",
+        "eyebrow": "In the spotlight",
+        "show_vendor": true,
+        "show_price": true,
+        "show_buy": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "ritual": {
+      "type": "ritual",
+      "blocks": {
+        "step-cleanse": {
+          "type": "step",
+          "settings": {
+            "label": "Step one",
+            "title": "Cleanse",
+            "text": "<p>Begin with a clean canvas. A gentle cleanse lifts away the day so every step that follows can do its work.</p>",
+            "product": "cloud-gel-cleanser"
+          }
+        },
+        "step-treat": {
+          "type": "step",
+          "settings": {
+            "label": "Step two",
+            "title": "Treat",
+            "text": "<p>Layer a serum chosen for what your skin needs right now — a few drops, pressed in with warm hands.</p>",
+            "product": "golden-hour-serum"
+          }
+        },
+        "step-moisturize": {
+          "type": "step",
+          "settings": {
+            "label": "Step three",
+            "title": "Moisturize",
+            "text": "<p>Finish with a moisturizer that keeps skin feeling soft and comfortable from morning to night.</p>",
+            "product": "velvet-day-cream"
+          }
+        }
+      },
+      "block_order": [
+        "step-cleanse",
+        "step-treat",
+        "step-moisturize"
+      ],
+      "settings": {
+        "eyebrow": "The ritual",
+        "heading": "Three steps to your <em>best skin days</em>",
+        "text": "<p>A simple, considered routine for morning and evening: cleanse, treat, moisturize.</p>",
+        "show_add_all": true,
+        "add_all_label": "Add the full ritual",
+        "color_scheme": "scheme-3",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/sb-story.jpg",
+        "image_2": "shopify://shop_images/sb-story-detail.jpg",
+        "image_ratio": "portrait",
+        "layout": "image_left",
+        "wide_media": false,
+        "eyebrow": "Our story",
+        "heading": "Curated with care. <em>Chosen with intention.</em>",
+        "heading_size": "h1",
+        "text": "<p>We search widely and choose carefully — formulas, textures and finishing touches that earn their place in a calm, simple routine.</p><p>Each product page shares what it is, how to use it and, wherever the maker provides it, the full ingredient list — so you can choose with confidence.</p>",
+        "button_label": "Read our story",
+        "button_link": "/pages/about-us",
+        "button_style": "secondary",
+        "button_label_2": "Shop new arrivals",
+        "button_link_2": "/collections/new-arrivals",
+        "color_scheme": "scheme-1",
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
+    },
+    "reviews": {
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "Kind words",
+        "heading": "In their <em>words</em>",
+        "columns": 3,
+        "color_scheme": "scheme-2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "before-after": {
+      "type": "before-after",
+      "disabled": true,
+      "settings": {
+        "confirm_authentic": false,
+        "before_label": "Before",
+        "after_label": "After 4 weeks",
+        "eyebrow": "Real results",
+        "heading": "See the difference",
+        "disclaimer": "Individual results vary. Images shared with the customer's permission and not retouched.",
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "The Skin & Beauty letter",
+        "heading": "Rituals, new arrivals <em>& journal notes</em>",
+        "text": "<p>Skincare notes, new arrivals and stories from the journal, straight to your inbox.</p>",
+        "button_label": "Subscribe",
+        "fine_print": "<p>By subscribing you agree to receive marketing emails from us. Unsubscribe anytime. See our <a href=\"/policies/privacy-policy\">privacy policy</a> for details.</p>",
+        "image": "shopify://shop_images/sb-newsletter.jpg",
+        "image_position": "left",
+        "alignment": "center",
+        "full_width": false,
+        "color_scheme": "scheme-3",
+        "padding_top": 48,
+        "padding_bottom": 104
+      }
+    },
+    "journal": {
+      "type": "featured-blog",
+      "settings": {
+        "eyebrow": "The journal",
+        "heading": "Notes on <em>skin & ritual</em>",
+        "text": "<p>Simple routines, ingredient guides and the thinking behind our shop.</p>",
+        "heading_alignment": "left",
+        "blog": "journal",
+        "posts_to_show": 3,
+        "show_date": true,
+        "show_excerpt": true,
+        "view_all_label": "Read the journal",
+        "color_scheme": "scheme-2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "good-to-know": {
+      "type": "faq",
+      "blocks": {
+        "q-makers": {
+          "type": "question",
+          "settings": {
+            "question": "How do you choose your products?",
+            "answer": "<p>Every product is chosen for how it feels to use, how clearly it is described and the place it can earn in a simple routine. When a product comes from a named brand, you'll see the brand on the product page.</p>"
+          }
+        },
+        "q-ingredients": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I find the full ingredient list?",
+            "answer": "<p>Where the manufacturer provides it, the full ingredient list (INCI) is in the Ingredients section of the product page. If a list is missing or unclear, write to us before you order. If you have allergies or sensitivities, always check the list and patch-test first.</p>"
+          }
+        },
+        "q-shipping": {
+          "type": "question",
+          "settings": {
+            "question": "How much is shipping, and how long does it take?",
+            "answer": "<p>Shipping options and costs are calculated from your address and shown at checkout, before you pay.</p>"
+          }
+        },
+        "q-returns": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return a product?",
+            "answer": "<p>Unopened products can be returned within [30] days of delivery. You'll find the full details on our <a href=\"/pages/shipping-returns\">Shipping & Returns</a> page.</p>"
+          },
+          "disabled": true
+        }
+      },
+      "block_order": [
+        "q-makers",
+        "q-ingredients",
+        "q-shipping",
+        "q-returns"
+      ],
+      "settings": {
+        "eyebrow": "Before you shop",
+        "heading": "Good to <em>know</em>",
+        "text": "<p>Quick answers before your first order.</p>",
+        "button_label": "All FAQs",
+        "button_link": "/pages/faq",
+        "layout": "split",
+        "structured_data": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "brazilian-rituals": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Inspired by Brazil",
+        "heading": "Brazilian <em>body rituals</em>",
+        "text": "<p>Rich butters, sun-warm scents and silky oils inspired by Brazil's love of everyday body care.</p>",
+        "heading_alignment": "left",
+        "collection": "brazilian-rituals",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "desktop_layout": "carousel",
+        "mobile_layout": "slider",
+        "show_view_all": true,
+        "view_all_label": "Explore the rituals",
+        "button_below": false,
+        "color_scheme": "scheme-6",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "body-hair": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Head to toe",
+        "heading": "Body & <em>hair</em>",
+        "text": "<p>Body butters, washes, oils and hair masks for the rest of your ritual.</p>",
+        "heading_alignment": "left",
+        "collection": "body-hair",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "desktop_layout": "grid",
+        "mobile_layout": "slider",
+        "show_view_all": true,
+        "view_all_label": "Shop body & hair",
+        "button_below": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "gift-sets": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Ready to give",
+        "heading": "Gift <em>sets</em>",
+        "text": "<p>Beautifully packaged sets and ritual duos.</p>",
+        "heading_alignment": "center",
+        "collection": "gift-sets",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "desktop_layout": "carousel",
+        "mobile_layout": "slider",
+        "show_view_all": true,
+        "view_all_label": "Shop all gift sets",
+        "button_below": true,
+        "color_scheme": "scheme-3",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "marquee",
+    "categories",
+    "bestsellers",
+    "brazilian-rituals",
+    "benefits",
+    "spotlight",
+    "ritual",
+    "body-hair",
+    "story",
+    "reviews",
+    "before-after",
+    "gift-sets",
+    "journal",
+    "good-to-know",
+    "newsletter"
+  ]
+}

@@ -1,0 +1,54 @@
+{%- comment -%}
+  Cart totals + checkout. Params: form_id (the form the checkout button submits), context
+{%- endcomment -%}
+<div class="cart-summary">
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="cart-summary__discounts" role="list">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li>{{ discount.title | escape }} (&minus;{{ discount.total_allocated_amount | money }})</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <div class="cart-summary__row">
+    <span class="cart-summary__label">{{ 'cart.subtotal' | t }}</span>
+    <span class="cart-summary__total">{{ cart.total_price | money_with_currency }}</span>
+  </div>
+
+  <p class="cart-summary__note">
+    {%- if cart.taxes_included -%}
+      {{ 'cart.taxes_included' | t }}
+    {%- else -%}
+      {{ 'cart.taxes_at_checkout' | t }}
+    {%- endif %}
+    {% if shop.shipping_policy.body != blank -%}
+      {{ 'cart.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+    {%- else -%}
+      {{ 'cart.shipping_at_checkout' | t }}
+    {%- endif -%}
+  </p>
+
+  <button type="submit" name="checkout" form="{{ form_id }}" class="button button--full button--large"{% if cart.item_count == 0 %} disabled{% endif %}>
+    {%- render 'icon', icon: 'lock', class: 'icon--small' -%}
+    <span>{{ 'cart.checkout' | t }}</span>
+  </button>
+
+  {%- if context == 'page' and additional_checkout_buttons -%}
+    <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+  {%- endif -%}
+
+  {%- if context == 'drawer' -%}
+    <a href="{{ routes.cart_url }}" class="link center">{{ 'cart.view_cart' | t }}</a>
+  {%- endif -%}
+
+  {%- if settings.cart_show_payment_icons -%}
+    <p class="cart-summary__secure">{% render 'icon', icon: 'shield' %}<span>{{ 'cart.secure_checkout' | t }}</span></p>
+    {%- if shop.enabled_payment_types.size > 0 -%}
+      <ul class="payment-icons" role="list" aria-label="{{ 'general.payment_methods' | t }}" style="justify-content: center;">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+</div>

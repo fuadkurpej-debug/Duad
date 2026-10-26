@@ -1,0 +1,652 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Skin & Beauty",
+    "theme_version": "1.0.0",
+    "theme_author": "Skin & Beauty",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Brand, logo & search",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Upload a logo image in the Header section. Without one, the brand name below is set in the heading font with an italic ampersand, and it updates everywhere when you change it."
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand name",
+        "default": "Skin & Beauty",
+        "info": "Used for the text logo, footer wordmark and page titles. Leave empty to use your store name from Settings → Store details."
+      },
+      {
+        "type": "text",
+        "id": "home_title",
+        "label": "Homepage title in search results",
+        "default": "Curated skincare & beauty essentials",
+        "info": "Shown after your brand name, e.g. \"Skin & Beauty | Curated skincare & beauty essentials\". A homepage title set in Online Store → Preferences takes priority."
+      },
+      {
+        "type": "textarea",
+        "id": "seo_description",
+        "label": "Fallback search description",
+        "default": "Curated skincare and our own everyday beauty essentials, with every maker clearly named.",
+        "info": "Shown in search results when a page has no description of its own. Set your homepage description in Online Store → Preferences."
+      },
+      {
+        "type": "image_picker",
+        "id": "social_image",
+        "label": "Default social sharing image",
+        "info": "Used when a page without its own image is shared. 1200 × 630 px works best."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Square image, at least 96 × 96px."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FBF8F4"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient",
+            "info": "Replaces the solid background when set."
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#2B2420"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent",
+            "default": "#B08D5E",
+            "info": "Used for stars, italic details, progress bars and soft highlights."
+          },
+          {
+            "type": "color",
+            "id": "card",
+            "label": "Cards",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "button",
+            "label": "Primary button",
+            "default": "#2B2420"
+          },
+          {
+            "type": "color",
+            "id": "button_label",
+            "label": "Primary button label",
+            "default": "#FBF8F4"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_label",
+            "label": "Secondary button label & border",
+            "default": "#2B2420"
+          },
+          {
+            "type": "color",
+            "id": "badge",
+            "label": "Badge background",
+            "default": "#F4E1DB"
+          },
+          {
+            "type": "color",
+            "id": "badge_label",
+            "label": "Badge label",
+            "default": "#2B2420"
+          },
+          {
+            "type": "color",
+            "id": "shadow",
+            "label": "Shadow",
+            "default": "#3C2A20"
+          }
+        ],
+        "role": {
+          "text": "text",
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
+          "links": "secondary_button_label",
+          "icons": "text",
+          "primary_button": "button",
+          "on_primary_button": "button_label",
+          "primary_button_border": "button",
+          "secondary_button": "background",
+          "on_secondary_button": "secondary_button_label",
+          "secondary_button_border": "secondary_button_label"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Font",
+        "default": "cormorant_n5"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 80,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "Size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "min": -30,
+        "max": 60,
+        "step": 5,
+        "label": "Letter spacing",
+        "info": "In thousandths of an em.",
+        "default": -5
+      },
+      {
+        "type": "select",
+        "id": "heading_case",
+        "label": "Letter case",
+        "options": [
+          {
+            "value": "none",
+            "label": "As typed"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Font",
+        "default": "jost_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 90,
+        "max": 120,
+        "step": 5,
+        "unit": "%",
+        "label": "Size",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Layout & shape",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1700,
+        "step": 20,
+        "unit": "px",
+        "label": "Page width",
+        "default": 1440
+      },
+      {
+        "type": "range",
+        "id": "radius_button",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Button corner radius",
+        "info": "40px gives pill-shaped buttons.",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "radius_input",
+        "min": 0,
+        "max": 30,
+        "step": 2,
+        "unit": "px",
+        "label": "Input corner radius",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "radius_card",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Card corner radius",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "radius_media",
+        "min": 0,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "label": "Image corner radius",
+        "default": 28
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "portrait",
+            "label": "Portrait 4:5"
+          },
+          {
+            "value": "tall",
+            "label": "Tall 3:4"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "portrait"
+      },
+      {
+        "type": "select",
+        "id": "card_image_fit",
+        "label": "Image fit",
+        "options": [
+          {
+            "value": "cover",
+            "label": "Fill the frame"
+          },
+          {
+            "value": "contain",
+            "label": "Show the whole image"
+          }
+        ],
+        "default": "cover",
+        "info": "Use \"Show the whole image\" for packshots on transparent or white backgrounds."
+      },
+      {
+        "type": "range",
+        "id": "card_image_padding",
+        "min": 0,
+        "max": 12,
+        "step": 1,
+        "unit": "%",
+        "label": "Image padding",
+        "default": 0
+      },
+      {
+        "type": "color",
+        "id": "card_media_background",
+        "label": "Image background",
+        "default": "#F3ECE4"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show brand (vendor)",
+        "default": true,
+        "info": "Shows who made each product — recommended for curated and partner products."
+      },
+      {
+        "type": "textarea",
+        "id": "vendor_hidden",
+        "label": "Hidden vendor names",
+        "default": "CJ Dropshipping\nCJdropshipping\nCJ\nSyncee\nAliExpress\nDSers\nZendrop\nSpocket\nAutoDS",
+        "info": "One per line. Supplier apps often set the vendor to their own name, which is not the maker. These names are never shown on cards, product pages or in the bag. To name the real brand, fill the product metafield custom.brand."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_subtitle",
+        "label": "Show subtitle",
+        "default": true,
+        "info": "From the product metafield custom.subtitle."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_secondary_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_rating",
+        "label": "Show product rating",
+        "default": true,
+        "info": "Ratings only appear when a reviews app provides genuine review data (reviews.rating metafield)."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_quick_add",
+        "label": "Enable quick add",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Badges",
+    "settings": [
+      {
+        "type": "select",
+        "id": "badge_shape",
+        "label": "Shape",
+        "options": [
+          {
+            "value": "pill",
+            "label": "Pill"
+          },
+          {
+            "value": "soft",
+            "label": "Soft square"
+          }
+        ],
+        "default": "pill"
+      },
+      {
+        "type": "header",
+        "content": "Sale"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_sale_show",
+        "label": "Show sale badge",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "badge_sale_style",
+        "label": "Sale badge text",
+        "options": [
+          {
+            "value": "text",
+            "label": "Sale"
+          },
+          {
+            "value": "percent",
+            "label": "Save X%"
+          }
+        ],
+        "default": "text"
+      },
+      {
+        "type": "paragraph",
+        "content": "Sale badges appear only when a product's compare-at price is higher than its price. In the EU the compare-at price must be the lowest price of the previous 30 days (Omnibus Directive). Optionally add it to the metafield custom.lowest_price_30_days to display it."
+      },
+      {
+        "type": "header",
+        "content": "Tags & own line"
+      },
+      {
+        "type": "text",
+        "id": "badge_bestseller_tag",
+        "label": "Bestseller tag",
+        "default": "bestseller",
+        "info": "Add this product tag only to products that genuinely sell best."
+      },
+      {
+        "type": "text",
+        "id": "badge_new_tag",
+        "label": "New tag",
+        "default": "new"
+      },
+      {
+        "type": "text",
+        "id": "own_brand_vendor",
+        "label": "Own-line vendor name",
+        "default": "Skin & Beauty",
+        "info": "Products whose vendor matches this name are labelled as your own line. Partner products always show their real maker."
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_own_show",
+        "label": "Show own-line badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_own_label",
+        "label": "Own-line badge text",
+        "default": "Our own line"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "header",
+        "content": "Free shipping progress"
+      },
+      {
+        "type": "checkbox",
+        "id": "free_shipping_enabled",
+        "label": "Show free shipping progress",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "default": 50,
+        "info": "In your store currency, e.g. 50 for €50. It must match a free shipping rate you set up in Settings → Shipping and delivery. Set to 0 to hide every free-shipping message."
+      },
+      {
+        "type": "paragraph",
+        "content": "The bar is shown only to customers shopping in your store currency, so the amount is always accurate."
+      },
+      {
+        "type": "header",
+        "content": "Cart content"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_recommendations",
+        "label": "Show recommendations",
+        "default": true,
+        "info": "Uses Shopify product recommendations based on the items in the cart."
+      },
+      {
+        "type": "collection",
+        "id": "cart_empty_collection",
+        "label": "Empty cart collection",
+        "info": "Linked from the empty cart."
+      },
+      {
+        "type": "link_list",
+        "id": "cart_empty_menu",
+        "label": "Empty cart quick links",
+        "info": "Shown as soft chips in the empty cart."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_note",
+        "label": "Enable order note on cart page",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_payment_icons",
+        "label": "Show payment icons",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Shipping & returns",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "These notes appear on product pages. Products can override the delivery estimate with the metafield custom.shipping_estimate — useful when partner products ship from another warehouse."
+      },
+      {
+        "type": "text",
+        "id": "shipping_estimate_default",
+        "label": "Default delivery estimate",
+        "info": "Example: Delivered in 3–6 business days within the EU. Leave empty to say shipping options are shown at checkout."
+      },
+      {
+        "type": "text",
+        "id": "returns_note",
+        "label": "Returns note",
+        "info": "Example: 30-day returns on unopened products. Only state what your refund policy guarantees."
+      },
+      {
+        "type": "url",
+        "id": "shipping_page",
+        "label": "Shipping & returns page"
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "label": "Enable search suggestions",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "search_menu",
+        "label": "Popular searches",
+        "info": "Shown when the search panel opens."
+      },
+      {
+        "type": "collection",
+        "id": "search_collection",
+        "label": "Featured collection in search panel"
+      }
+    ]
+  },
+  {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animations_reveal",
+        "label": "Reveal sections on scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_hover",
+        "label": "Hover effects",
+        "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "Animations are always disabled for visitors who prefer reduced motion."
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/yourbrand"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https://tiktok.com/@yourbrand"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "X (Twitter)"
+      }
+    ]
+  },
+  {
+    "name": "Currency format",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency codes",
+        "default": false,
+        "info": "Recommended when you sell in several currencies, e.g. €42.00 EUR."
+      }
+    ]
+  }
+]

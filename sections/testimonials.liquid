@@ -1,0 +1,206 @@
+{%- comment -%}
+  Customer reviews. Only genuine reviews: add them as blocks (with the customer's permission)
+  or add a review app block. With no reviews the section stays hidden on the live store.
+{%- endcomment -%}
+{%- liquid
+  assign review_blocks = section.blocks | where: 'type', 'review'
+  assign app_blocks = section.blocks | where: 'type', '@app'
+  assign has_content = false
+  if review_blocks.size > 0 or app_blocks.size > 0
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content or request.design_mode -%}
+  <div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+    <div class="page-width">
+      {%- render 'section-header',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        align: 'center'
+      -%}
+
+      {%- if review_blocks.size > 0 -%}
+        <ul class="slider slider--desktop-grid" style="--cols-desktop: {{ section.settings.columns }}; --slide-width: 86%;" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type != 'review' -%}{%- continue -%}{%- endif -%}
+            {%- assign order = forloop.index0 | modulo: 3 -%}
+            <li {{ block.shopify_attributes }} data-reveal style="--reveal-order: {{ order }};">
+              <figure class="review-card">
+                {%- if block.settings.rating > 0 -%}
+                  {%- assign percent = block.settings.rating | times: 20 -%}
+                  <span class="rating">
+                    <span class="rating__stars" style="--percent: {{ percent }}%;" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: block.settings.rating, rating_max: 5 }}"></span>
+                  </span>
+                {%- endif -%}
+                <blockquote class="review-card__quote">{{ block.settings.quote }}</blockquote>
+                <figcaption class="review-card__footer">
+                  <span class="review-card__author">
+                    {{- block.settings.author | escape -}}
+                    {%- if block.settings.detail != blank %} <span class="text-muted">· {{ block.settings.detail | escape }}</span>{% endif -%}
+                  </span>
+                  {%- if block.settings.verified -%}
+                    <span class="review-card__verified">{% render 'icon', icon: 'check' %}{{ 'sections.reviews.verified' | t }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.product != blank -%}
+                    <span class="review-card__product">{{ 'sections.reviews.reviewed' | t }} <a href="{{ block.settings.product.url }}">{{ block.settings.product.title | escape }}</a></span>
+                  {%- endif -%}
+                </figcaption>
+              </figure>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- elsif request.design_mode and app_blocks.size == 0 -%}
+        <div class="editor-placeholder">
+          {%- render 'icon', icon: 'chat' -%}
+          <p>{{ 'sections.reviews.editor_hint' | t }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- for block in app_blocks -%}
+        <div class="gap-top" {{ block.shopify_attributes }}>{% render block %}</div>
+      {%- endfor -%}
+
+      {%- if section.settings.note != blank and has_content -%}
+        <p class="reviews__note">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "tag": "section",
+  "class": "testimonials-section",
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Publish only genuine reviews from real customers, with their permission. Never write or edit reviews yourself. The section is hidden on your store until you add a review or a review app block."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Kind words"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "In their <em>words</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "How reviews are collected",
+      "info": "EU rules require explaining whether and how you check that reviews come from real customers. Example: Reviews are collected by email after delivery and come only from verified buyers."
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Review text",
+          "info": "Copy the customer's words exactly."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer name",
+          "info": "First name and initial is enough, e.g. Ana M."
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Detail",
+          "info": "Optional, e.g. city or skin type."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "info": "The rating the customer gave. 0 hides the stars.",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified purchase",
+          "info": "Only tick if you confirmed this person bought the product.",
+          "default": false
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Reviewed product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer reviews"
+    }
+  ]
+}
+{% endschema %}

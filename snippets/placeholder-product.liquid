@@ -1,0 +1,58 @@
+{%- comment -%}
+  Elegant illustrated placeholder shown until a product has its own photos.
+  The shape follows the product type (serum, cream, cleanser, mask, lip, tool).
+  Params: product (optional), index (optional, unique id when product is nil)
+{%- endcomment -%}
+{%- liquid
+  assign uid = product.id | default: index | default: 'x'
+  assign type = product.type | append: ' ' | append: product.title | downcase
+  assign shape = 'bottle'
+  if type contains 'serum' or type contains 'oil' or type contains 'drop'
+    assign shape = 'dropper'
+  elsif type contains 'cream' or type contains 'moistur' or type contains 'balm' or type contains 'mask' or type contains 'jar'
+    assign shape = 'jar'
+  elsif type contains 'cleans' or type contains 'gel' or type contains 'lip' or type contains 'tube' or type contains 'eye'
+    assign shape = 'tube'
+  endif
+-%}
+<svg class="placeholder-product" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{ product.title | default: 'Product' | escape }}" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="pp-bg-{{ uid }}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7EFE8"/>
+      <stop offset="1" stop-color="#EBDCD0"/>
+    </linearGradient>
+    <linearGradient id="pp-body-{{ uid }}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#E9CFC4"/>
+      <stop offset=".45" stop-color="#F6E6DE"/>
+      <stop offset="1" stop-color="#DDBBAE"/>
+    </linearGradient>
+    <linearGradient id="pp-cap-{{ uid }}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#B9946B"/>
+      <stop offset=".5" stop-color="#E3C9A3"/>
+      <stop offset="1" stop-color="#A9845A"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#pp-bg-{{ uid }})"/>
+  <path d="M95 500V215a105 105 0 0 1 210 0v285z" fill="#FFFFFF" opacity=".42"/>
+  <ellipse cx="200" cy="418" rx="92" ry="14" fill="#7A5A48" opacity=".14"/>
+  {%- case shape -%}
+    {%- when 'dropper' -%}
+      <rect x="182" y="132" width="36" height="52" rx="16" fill="#3B302B" opacity=".85"/>
+      <rect x="170" y="176" width="60" height="28" rx="6" fill="url(#pp-cap-{{ uid }})"/>
+      <rect x="146" y="200" width="108" height="218" rx="26" fill="url(#pp-body-{{ uid }})"/>
+      <rect x="160" y="214" width="10" height="170" rx="5" fill="#FFFFFF" opacity=".45"/>
+    {%- when 'jar' -%}
+      <rect x="118" y="270" width="164" height="148" rx="30" fill="url(#pp-body-{{ uid }})"/>
+      <rect x="112" y="236" width="176" height="48" rx="14" fill="url(#pp-cap-{{ uid }})"/>
+      <rect x="132" y="292" width="10" height="100" rx="5" fill="#FFFFFF" opacity=".45"/>
+    {%- when 'tube' -%}
+      <path d="M154 140h92l-10 278h-72z" fill="url(#pp-body-{{ uid }})"/>
+      <rect x="160" y="404" width="80" height="22" rx="6" fill="url(#pp-cap-{{ uid }})"/>
+      <rect x="150" y="128" width="100" height="16" rx="3" fill="#E7D3C7"/>
+      <rect x="170" y="160" width="9" height="210" rx="4.5" fill="#FFFFFF" opacity=".45"/>
+    {%- else -%}
+      <rect x="186" y="128" width="28" height="40" rx="6" fill="url(#pp-cap-{{ uid }})"/>
+      <rect x="150" y="166" width="100" height="252" rx="34" fill="url(#pp-body-{{ uid }})"/>
+      <rect x="164" y="186" width="10" height="200" rx="5" fill="#FFFFFF" opacity=".45"/>
+  {%- endcase -%}
+</svg>

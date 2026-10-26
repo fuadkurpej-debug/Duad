@@ -1,0 +1,40 @@
+{%- comment -%}
+  Free shipping progress. Uses the threshold from Theme settings → Cart, which must
+  match the free shipping rate configured in Settings → Shipping and delivery.
+  Only shown to customers paying in the store currency so the amount is exact.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0 | times: 100 | round
+  assign show_bar = false
+  if settings.free_shipping_enabled and threshold > 0 and cart.currency.iso_code == shop.currency
+    assign show_bar = true
+  endif
+-%}
+{%- if show_bar -%}
+  {%- liquid
+    assign total = cart.total_price
+    assign remaining = threshold | minus: total
+    assign progress = total | times: 100 | divided_by: threshold
+    if progress > 100
+      assign progress = 100
+    endif
+  -%}
+  <div class="free-shipping{% if remaining <= 0 %} free-shipping--done{% endif %}">
+    {%- if remaining > 0 -%}
+      {%- assign remaining_money = remaining | money -%}
+      <p>{% render 'icon', icon: 'truck' %}<span>{{ 'cart.free_shipping.remaining_html' | t: amount: remaining_money }}</span></p>
+    {%- else -%}
+      <p>{% render 'icon', icon: 'check' %}<span>{{ 'cart.free_shipping.unlocked' | t }}</span></p>
+    {%- endif -%}
+    <div
+      class="free-shipping__track"
+      role="progressbar"
+      aria-label="{{ 'cart.free_shipping.label' | t }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ progress }}"
+    >
+      <span class="free-shipping__bar" style="--progress: {{ progress }}%;"></span>
+    </div>
+  </div>
+{%- endif -%}

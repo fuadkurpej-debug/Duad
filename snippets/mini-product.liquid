@@ -1,0 +1,36 @@
+{%- comment -%}
+  Compact product row used in the cart drawer and "Complete your ritual".
+  Params: product
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+<div class="mini-product">
+  <a href="{{ product.url }}" class="mini-product__media" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', widths: '100, 150, 200', sizes: '4rem', alt: '' }}
+    {%- else -%}
+      {%- render 'placeholder-product', product: product -%}
+    {%- endif -%}
+  </a>
+  <div>
+    <p class="mini-product__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></p>
+    {%- render 'price', product: product, show_unit: false -%}
+  </div>
+  {%- if product.has_only_default_variant or product.variants.size == 1 -%}
+    <button
+      type="button"
+      class="mini-product__add"
+      data-add-variants="{{ variant.id }}"
+      aria-label="{{ 'products.product.quick_add_to' | t: title: product.title | escape }}"
+    >
+      {%- render 'icon', icon: 'plus' -%}
+    </button>
+  {%- else -%}
+    <a
+      href="{{ product.url }}"
+      class="mini-product__add"
+      aria-label="{{ 'products.product.choose_options_for' | t: title: product.title | escape }}"
+    >
+      {%- render 'icon', icon: 'arrow-right' -%}
+    </a>
+  {%- endif -%}
+</div>

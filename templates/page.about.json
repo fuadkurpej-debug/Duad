@@ -1,0 +1,167 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "image": "shopify://shop_images/sb-about-hero.jpg",
+        "image_mobile": "shopify://shop_images/sb-about-hero-mobile.jpg",
+        "height": "medium",
+        "animate": true,
+        "overlay_style": "none",
+        "overlay_opacity": 0,
+        "eyebrow": "Our story",
+        "heading": "Skin, softly <em>considered.</em>",
+        "heading_size": "h1",
+        "text": "<p>A curated skincare and beauty house — carefully chosen essentials for calm, considered rituals.</p>",
+        "button_label_1": "",
+        "button_label_2": "",
+        "desktop_position": "middle-left",
+        "boxed": false,
+        "mobile_layout": "stack",
+        "mobile_text_alignment": "left",
+        "show_scroll_cue": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "story": {
+      "type": "main-page",
+      "settings": {
+        "style": "default",
+        "show_title": false,
+        "title_alignment": "left",
+        "show_updated": false,
+        "width": "narrow",
+        "color_scheme": "scheme-1",
+        "padding_top": 88,
+        "padding_bottom": 64
+      }
+    },
+    "how-we-choose": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/sb-story.jpg",
+        "image_ratio": "portrait",
+        "layout": "image_left",
+        "wide_media": false,
+        "eyebrow": "Curation",
+        "heading": "How we <em>choose</em>",
+        "heading_size": "h1",
+        "text": "<p>Every product earns its place on our shelves. Before something joins the collection, we ask:</p><ul><li><strong>How does it feel?</strong> — textures you'll look forward to using.</li><li><strong>Is it clearly described?</strong> — what it is, how to use it and, wherever the maker provides it, what's inside.</li><li><strong>Does it earn its place?</strong> — fewer, better steps rather than more.</li><li><strong>Is the price fair?</strong> — with every cost shown before you pay.</li></ul>",
+        "button_label": "Shop the collection",
+        "button_link": "/collections/all",
+        "button_style": "secondary",
+        "color_scheme": "scheme-1",
+        "padding_top": 64,
+        "padding_bottom": 104
+      }
+    },
+    "promises": {
+      "type": "info-grid",
+      "blocks": {
+        "promise-maker": {
+          "type": "card",
+          "settings": {
+            "icon": "sparkle",
+            "kicker": "Transparency",
+            "title": "Clear product details",
+            "text": "<p>What it is, how to use it and, wherever the maker provides it, the full ingredient list.</p>"
+          }
+        },
+        "promise-ingredients": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "kicker": "Trust",
+            "title": "Genuine reviews only",
+            "text": "<p>We only ever show real reviews from real customers — never invented ones.</p>"
+          }
+        },
+        "promise-delivery": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "kicker": "Honesty",
+            "title": "Clear delivery details",
+            "text": "<p>Shipping costs shown before you pay, and a clear note when an item ships separately.</p>"
+          }
+        },
+        "promise-support": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "kicker": "Care",
+            "title": "Real people, real advice",
+            "text": "<p>Questions about an order or your routine? Write to us. We are happy to help.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "promise-maker",
+        "promise-ingredients",
+        "promise-delivery",
+        "promise-support"
+      ],
+      "settings": {
+        "eyebrow": "Our promises",
+        "heading": "What you can <em>always expect</em>",
+        "heading_alignment": "center",
+        "columns": 4,
+        "color_scheme": "scheme-2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "own-line": {
+      "type": "image-with-text",
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/sb-category-moisturizers.jpg",
+        "image_ratio": "portrait",
+        "layout": "image_right",
+        "wide_media": false,
+        "eyebrow": "Made for Skin & Beauty",
+        "heading": "Our own <em>essentials</em>",
+        "heading_size": "h1",
+        "text": "<p>Alongside our curated selection, we create a small line of everyday essentials under the Skin &amp; Beauty name — the simple, reliable products we always want within reach.</p><p>Look for the <em>Our own line</em> label throughout the store.</p>",
+        "button_label": "Shop our own line",
+        "button_link": "/collections/our-own-line",
+        "button_style": "primary",
+        "color_scheme": "scheme-1",
+        "padding_top": 104,
+        "padding_bottom": 104
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "The Skin & Beauty letter",
+        "heading": "Stay in the <em>ritual</em>",
+        "text": "<p>New arrivals, routine notes and stories from the journal.</p>",
+        "button_label": "Subscribe",
+        "fine_print": "<p>By subscribing you agree to receive marketing emails from us. Unsubscribe anytime. See our <a href=\"/policies/privacy-policy\">privacy policy</a>.</p>",
+        "alignment": "center",
+        "full_width": false,
+        "color_scheme": "scheme-3",
+        "padding_top": 24,
+        "padding_bottom": 104
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "story",
+    "how-we-choose",
+    "promises",
+    "own-line",
+    "newsletter"
+  ]
+}

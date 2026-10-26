@@ -1,0 +1,190 @@
+{%- liquid
+  assign video = section.settings.video
+  assign video_url = section.settings.video_url
+  assign cover = section.settings.cover_image
+  assign has_video = false
+  if video != blank or video_url != blank
+    assign has_video = true
+  endif
+  assign label = section.settings.heading | strip_html | escape
+  if label == blank
+    assign label = 'sections.video.play' | t
+  endif
+-%}
+
+{%- if has_video or request.design_mode -%}
+  <div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+    <div class="{% if section.settings.full_width %}page-width--full{% else %}page-width{% endif %}">
+      {%- render 'section-header',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        align: 'center'
+      -%}
+
+      <div class="video-section media media--{{ section.settings.ratio }}{% if section.settings.full_width %} video-section--full{% endif %}" data-reveal>
+        {%- if video != blank -%}
+          {%- comment -%} Shopify-hosted video: plays muted in a loop; theme.js pauses it for visitors who prefer reduced motion {%- endcomment -%}
+          <video
+            class="video-section__player"
+            playsinline
+            muted
+            loop
+            preload="metadata"
+            {% if section.settings.autoplay %}autoplay data-reduced-motion-pause{% endif %}
+            {% if section.settings.show_controls %}controls{% endif %}
+            poster="{{ video.preview_image | image_url: width: 1800 }}"
+            aria-label="{{ label }}"
+          >
+            {%- for source in video.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+        {%- elsif video_url != blank -%}
+          {%- liquid
+            if video_url.type == 'youtube'
+              assign embed_src = 'https://www.youtube-nocookie.com/embed/' | append: video_url.id | append: '?autoplay=1&rel=0&playsinline=1'
+            else
+              assign embed_src = 'https://player.vimeo.com/video/' | append: video_url.id | append: '?autoplay=1&dnt=1'
+            endif
+          -%}
+          <deferred-video class="video-section__deferred" data-src="{{ embed_src }}" data-title="{{ label }}">
+            {%- if cover != blank -%}
+              {{ cover | image_url: width: 1800 | image_tag: widths: '600, 900, 1200, 1500, 1800', sizes: '(min-width: 1200px) 1200px, 100vw', loading: 'lazy', alt: '' }}
+            {%- else -%}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+            <button type="button" class="video-section__play" data-video-play aria-label="{{ 'sections.video.play_label' | t: title: label }}">
+              {%- render 'icon', icon: 'play' -%}
+            </button>
+          </deferred-video>
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      {%- if section.settings.caption != blank -%}
+        <p class="video-section__caption text-muted">{{ section.settings.caption | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": "section",
+  "class": "video-section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The ritual, <em>in motion</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-hosted video",
+      "info": "Upload under Content → Files. Plays muted in a loop."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay hosted video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show video controls",
+      "default": false
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Or YouTube / Vimeo link",
+      "accept": ["youtube", "vimeo"],
+      "info": "Loads only when the visitor presses play."
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "Cover image for YouTube / Vimeo"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Shape",
+      "options": [
+        { "value": "wide", "label": "Widescreen (16:9)" },
+        { "value": "landscape", "label": "Landscape (3:2)" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 88
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

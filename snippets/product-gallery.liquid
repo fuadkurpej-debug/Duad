@@ -1,0 +1,134 @@
+{%- comment -%}
+  Product media gallery + zoom lightbox. The selected variant's image is shown first.
+  Params: product, section_id, layout ('grid' | 'stacked'), enable_zoom (bool), ratio ('portrait' | 'square' | 'natural'),
+  fit ('cover' | 'contain'), limit (images shown on desktop before "Show all"; 0 shows every image)
+{%- endcomment -%}
+{%- liquid
+  assign limit = limit | default: 0
+  assign limited = false
+  if limit > 0 and product.media.size > limit
+    assign limited = true
+  endif
+  assign featured = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+  assign image_count = 0
+  for media in product.media
+    if media.media_type == 'image'
+      assign image_count = image_count | plus: 1
+    endif
+  endfor
+  assign zoom_index = 0
+  assign position = 0
+-%}
+<product-gallery
+  class="product-gallery product-gallery--{{ layout | default: 'grid' }} product-gallery--{{ ratio | default: 'portrait' }}{% if fit == 'contain' %} product-gallery--contain{% endif %}{% if limited %} product-gallery--limited{% endif %}"
+  data-section="{{ section_id }}"
+  data-zoom="{{ enable_zoom }}"
+  {% if limited %}
+    data-limit="{{ limit }}"
+  {% endif %}
+>
+  <ul class="product-gallery__track" data-gallery-track role="list" aria-label="{{ 'products.product.media.gallery_viewer' | t }}">
+    {%- if product.media.size > 0 -%}
+      {%- if featured -%}
+        {%- assign position = position | plus: 1 -%}
+        {%- render 'product-media-item', media: featured, product: product, enable_zoom: enable_zoom, zoom_index: zoom_index, position: position, eager: true, extra: false -%}
+        {%- if featured.media_type == 'image' -%}{%- assign zoom_index = zoom_index | plus: 1 -%}{%- endif -%}
+      {%- endif -%}
+      {%- for media in product.media -%}
+        {%- if featured and media.id == featured.id -%}{%- continue -%}{%- endif -%}
+        {%- assign position = position | plus: 1 -%}
+        {%- assign eager = false -%}
+        {%- if featured == blank and forloop.first -%}{%- assign eager = true -%}{%- endif -%}
+        {%- assign extra = false -%}
+        {%- if limited and position > limit -%}{%- assign extra = true -%}{%- endif -%}
+        {%- render 'product-media-item', media: media, product: product, enable_zoom: enable_zoom, zoom_index: zoom_index, position: position, eager: eager, extra: extra -%}
+        {%- if media.media_type == 'image' -%}{%- assign zoom_index = zoom_index | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      <li class="product-gallery__item">
+        <div class="product-gallery__frame">{%- render 'placeholder-product', product: product -%}</div>
+      </li>
+    {%- endif -%}
+  </ul>
+
+  {%- if limited -%}
+    <button type="button" class="button button--secondary product-gallery__more" data-gallery-more aria-expanded="false">
+      {{- 'products.product.media.show_all' | t: count: product.media.size -}}
+    </button>
+  {%- endif -%}
+
+  {%- if product.media.size > 1 -%}
+    <div class="product-gallery__nav{% if product.media.size > 8 %} product-gallery__nav--compact{% endif %}">
+      <div class="product-gallery__dots">
+        {%- for media in product.media -%}
+          <button
+            type="button"
+            class="product-gallery__dot{% if forloop.first %} is-active{% endif %}"
+            data-gallery-dot
+            data-index="{{ forloop.index0 }}"
+            aria-label="{{ 'products.product.media.slide' | t: index: forloop.index, count: product.media.size }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          ></button>
+        {%- endfor -%}
+      </div>
+      <span class="product-gallery__counter" aria-hidden="true"><span data-gallery-current>1</span> / {{ product.media.size }}</span>
+    </div>
+  {%- endif -%}
+</product-gallery>
+
+{%- if enable_zoom and image_count > 0 -%}
+  <product-lightbox
+    id="Lightbox-{{ section_id }}"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
+    tabindex="-1"
+    hidden
+  >
+    <div class="lightbox__toolbar">
+      <span class="lightbox__counter"><span data-lightbox-current>1</span> / {{ image_count }}</span>
+      <button type="button" class="icon-button" data-lightbox-close aria-label="{{ 'accessibility.close' | t }}">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+    </div>
+    <ul class="lightbox__track" data-lightbox-track role="list">
+      {%- if featured and featured.media_type == 'image' -%}
+        <li class="lightbox__slide">
+          <img
+            data-src="{{ featured | image_url: width: 2400 }}"
+            data-srcset="{{ featured | image_url: width: 1200 }} 1200w, {{ featured | image_url: width: 1800 }} 1800w, {{ featured | image_url: width: 2400 }} 2400w"
+            sizes="100vw"
+            alt="{{ featured.alt | default: product.title | escape }}"
+            width="{{ featured.width }}"
+            height="{{ featured.height }}"
+          >
+        </li>
+      {%- endif -%}
+      {%- for media in product.media -%}
+        {%- if featured and media.id == featured.id -%}{%- continue -%}{%- endif -%}
+        {%- if media.media_type == 'image' -%}
+          <li class="lightbox__slide">
+            <img
+              data-src="{{ media | image_url: width: 2400 }}"
+              data-srcset="{{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1800 }} 1800w, {{ media | image_url: width: 2400 }} 2400w"
+              sizes="100vw"
+              alt="{{ media.alt | default: product.title | escape }}"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+            >
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    {%- if image_count > 1 -%}
+      <button type="button" class="lightbox__arrow lightbox__arrow--prev icon-button" data-lightbox-prev aria-label="{{ 'accessibility.previous_slide' | t }}">
+        {%- render 'icon', icon: 'arrow-left' -%}
+      </button>
+      <button type="button" class="lightbox__arrow lightbox__arrow--next icon-button" data-lightbox-next aria-label="{{ 'accessibility.next_slide' | t }}">
+        {%- render 'icon', icon: 'arrow-right' -%}
+      </button>
+    {%- endif -%}
+    <p class="lightbox__hint">{{ 'products.product.media.zoom_hint' | t }}</p>
+  </product-lightbox>
+{%- endif -%}

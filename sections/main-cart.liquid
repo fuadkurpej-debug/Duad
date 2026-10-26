@@ -1,0 +1,108 @@
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;" data-cart-section="{{ section.id }}">
+  <div class="page-width" data-cart-render="page-{{ section.id }}">
+    {%- if cart.item_count > 0 -%}
+      <div class="cart-page">
+        <div class="cart-page__main">
+          <div class="cart-page__header">
+            <h1 class="h1">{{ 'cart.title' | t }}</h1>
+            <a href="{{ routes.all_products_collection_url }}" class="link">{{ 'cart.continue' | t }} {% render 'icon', icon: 'arrow-right' %}</a>
+          </div>
+          {%- render 'free-shipping-bar' -%}
+          <form action="{{ routes.cart_url }}" method="post" id="CartPageForm" novalidate>
+            <h2 class="visually-hidden">{{ 'cart.items_heading' | t }}</h2>
+            <cart-items>
+              <ul class="cart-items cart-items--page" role="list">
+                {%- for item in cart.items -%}
+                  {%- render 'cart-line-item', item: item, index: forloop.index, context: 'page' -%}
+                {%- endfor -%}
+              </ul>
+            </cart-items>
+            <noscript>
+              <button type="submit" class="button button--secondary gap-top" name="update">{{ 'cart.update' | t }}</button>
+            </noscript>
+            {%- if settings.cart_show_note -%}
+              <div class="field cart-page__note">
+                <label class="field__label" for="CartNote">{{ 'cart.note' | t }}</label>
+                <textarea id="CartNote" name="note" data-cart-note placeholder="{{ 'cart.note_placeholder' | t }}">{{ cart.note }}</textarea>
+              </div>
+            {%- endif -%}
+          </form>
+        </div>
+
+        <aside class="cart-page__summary" aria-labelledby="CartSummaryTitle">
+          <h2 class="h3" id="CartSummaryTitle">{{ 'cart.summary' | t }}</h2>
+          {%- render 'cart-summary', form_id: 'CartPageForm', context: 'page' -%}
+        </aside>
+      </div>
+    {%- else -%}
+      <div class="empty-state">
+        <span class="cart-drawer__empty-icon">{%- render 'icon', icon: 'bag' -%}</span>
+        <h1 class="h1">{{ 'cart.empty' | t }}</h1>
+        <p>{{ 'cart.empty_text' | t }}</p>
+        <a href="{{ settings.cart_empty_collection.url | default: routes.all_products_collection_url }}" class="button button--large">{{ 'cart.empty_cta' | t }}</a>
+        {%- if settings.cart_empty_menu != blank and settings.cart_empty_menu.links.size > 0 -%}
+          <div class="cart-drawer__empty-links">
+            {%- for link in settings.cart_empty_menu.links -%}
+              <a class="chip chip--soft" href="{{ link.url }}">{{ link.title | escape }}</a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if shop.customer_accounts_enabled and customer == nil -%}
+          <p class="text-small">{{ 'cart.login_html' | t: link: routes.account_login_url }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .cart-page { display: grid; gap: 2.5rem; align-items: start; }
+  .cart-page__header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .cart-page__header .h1 { margin: 0; }
+  .cart-items--page .cart-item { grid-template-columns: 6.5rem 1fr; gap: 1.25rem; padding-block: 1.5rem; }
+  .cart-page__note { margin-top: 2rem; }
+  .cart-page__summary { display: grid; gap: 1.25rem; padding: 1.75rem; border-radius: var(--radius-card); background: rgb(var(--color-card)); border: 1px solid rgba(var(--color-text), 0.07); }
+  .cart-page__summary .h3 { margin: 0; }
+  .additional-checkout-buttons { margin-top: 0.25rem; }
+  @media (min-width: 990px) {
+    .cart-page { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 4rem; }
+    .cart-page__summary { position: sticky; top: calc(var(--header-height) + 1.5rem); }
+    .cart-items--page .cart-item { grid-template-columns: 8rem 1fr; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "class": "main-cart-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,71 @@
+{%- comment -%}
+  Design tokens: fonts, color schemes and global layout variables.
+  Everything here is driven by Theme settings so merchants never need to edit CSS.
+{%- endcomment -%}
+{%- liquid
+  assign heading_font = settings.type_heading_font
+  assign heading_font_italic = heading_font | font_modify: 'style', 'italic'
+  assign body_font = settings.type_body_font
+  assign body_font_medium = body_font | font_modify: 'weight', '500'
+  assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+  assign body_font_italic = body_font | font_modify: 'style', 'italic'
+-%}
+<style>
+  {{ heading_font | font_face: font_display: 'swap' }}
+  {{ heading_font_italic | font_face: font_display: 'swap' }}
+  {{ body_font | font_face: font_display: 'swap' }}
+  {{ body_font_medium | font_face: font_display: 'swap' }}
+  {{ body_font_bold | font_face: font_display: 'swap' }}
+  {{ body_font_italic | font_face: font_display: 'swap' }}
+
+  {% for scheme in settings.color_schemes -%}
+    {%- liquid
+      assign s = scheme.settings
+      assign bg = s.background
+      assign text = s.text
+    -%}
+    {% if forloop.first %}:root,{% endif %}
+    .color-{{ scheme.id }} {
+      --color-background: {{ bg.red }}, {{ bg.green }}, {{ bg.blue }};
+      {%- if s.background_gradient != empty %}
+      --gradient-background: {{ s.background_gradient }};
+      {%- else %}
+      --gradient-background: {{ bg }};
+      {%- endif %}
+      --color-text: {{ text.red }}, {{ text.green }}, {{ text.blue }};
+      --color-accent: {{ s.accent.red }}, {{ s.accent.green }}, {{ s.accent.blue }};
+      --color-button: {{ s.button.red }}, {{ s.button.green }}, {{ s.button.blue }};
+      --color-button-text: {{ s.button_label.red }}, {{ s.button_label.green }}, {{ s.button_label.blue }};
+      --color-secondary-button-text: {{ s.secondary_button_label.red }}, {{ s.secondary_button_label.green }}, {{ s.secondary_button_label.blue }};
+      --color-card: {{ s.card.red }}, {{ s.card.green }}, {{ s.card.blue }};
+      --color-badge: {{ s.badge.red }}, {{ s.badge.green }}, {{ s.badge.blue }};
+      --color-badge-text: {{ s.badge_label.red }}, {{ s.badge_label.green }}, {{ s.badge_label.blue }};
+      --color-shadow: {{ s.shadow.red }}, {{ s.shadow.green }}, {{ s.shadow.blue }};
+    }
+  {% endfor %}
+
+  :root {
+    --font-heading-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --font-heading-style: {{ heading_font.style }};
+    --font-heading-weight: {{ heading_font.weight }};
+    --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-body-style: {{ body_font.style }};
+    --font-body-weight: {{ body_font.weight }};
+    --font-body-weight-medium: {% if body_font_medium %}{{ body_font_medium.weight }}{% else %}{{ body_font.weight | plus: 100 }}{% endif %};
+    --font-body-weight-bold: {% if body_font_bold %}{{ body_font_bold.weight }}{% else %}700{% endif %};
+
+    --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+    --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --heading-letter-spacing: {{ settings.heading_letter_spacing | divided_by: 1000.0 }}em;
+    --heading-text-transform: {{ settings.heading_case }};
+
+    --page-width: {{ settings.page_width }}px;
+    --radius-button: {{ settings.radius_button }}px;
+    --radius-input: {{ settings.radius_input }}px;
+    --radius-card: {{ settings.radius_card }}px;
+    --radius-media: {{ settings.radius_media }}px;
+    --card-media-background: {{ settings.card_media_background }};
+    --card-image-padding: {{ settings.card_image_padding }}%;
+    --badge-radius: {% if settings.badge_shape == 'pill' %}999px{% else %}6px{% endif %};
+  }
+</style>

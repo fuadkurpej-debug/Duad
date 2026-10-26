@@ -1,0 +1,183 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign layout = section.settings.filter_layout
+  assign columns = section.settings.columns_desktop
+  if layout == 'sidebar' and columns > 3
+    assign columns = 3
+  endif
+  assign clear_url = collection.url
+  if collection.sort_by and collection.sort_by != collection.default_sort_by
+    assign clear_url = collection.url | append: '?sort_by=' | append: collection.sort_by
+  endif
+-%}
+<div
+  class="section color-{{ section.settings.color_scheme }}"
+  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;"
+  data-facets-root
+>
+  <div class="page-width">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- assign collection_is_empty = false -%}
+      {%- if collection.all_products_count == 0 -%}
+        {%- assign collection_is_empty = true -%}
+      {%- endif -%}
+      <div class="facets-layout facets-layout--{{ layout }}{% if collection_is_empty or section.settings.enable_filtering == false or collection.filters.size == 0 %} facets-layout--no-filters{% endif %}">
+        {%- unless collection_is_empty -%}
+          {%- render 'facets',
+            results: collection,
+            section_id: section.id,
+            layout: layout,
+            enable_filtering: section.settings.enable_filtering,
+            enable_sorting: section.settings.enable_sorting,
+            product_count: collection.products_count,
+            clear_url: clear_url,
+            color_scheme: section.settings.color_scheme
+          -%}
+        {%- endunless -%}
+
+        <div id="ProductGridContainer" class="product-grid-container" data-facets-render="grid-{{ section.id }}">
+          {%- if collection_is_empty -%}
+            {%- comment -%} No products in this collection yet (for example while products are drafts) {%- endcomment -%}
+            {%- assign journal = blogs.journal -%}
+            <div class="collection-empty collection-empty--curating">
+              <span class="collection-empty__icon">{% render 'icon', icon: 'sparkle' %}</span>
+              <p class="h3">{{ 'collections.curating' | t }}</p>
+              <p class="text-muted">{{ 'collections.curating_text' | t }}</p>
+              <div class="button-group">
+                {%- if journal.articles_count > 0 -%}
+                  <a href="{{ journal.url }}" class="button button--secondary">{{ 'collections.curating_journal' | t }}</a>
+                {%- endif -%}
+                <a href="{{ routes.collections_url }}" class="link">{{ 'collections.curating_browse' | t }} {% render 'icon', icon: 'arrow-right' %}</a>
+              </div>
+            </div>
+          {%- elsif collection.products.size == 0 -%}
+            <div class="collection-empty">
+              <p class="h3">{{ 'collections.empty' | t }}</p>
+              <p class="text-muted">{{ 'collections.empty_text' | t }}</p>
+              <a href="{{ collection.url }}" class="button button--secondary" data-facet-link>{{ 'products.facets.clear_all' | t }}</a>
+            </div>
+          {%- else -%}
+            <h2 class="visually-hidden">{{ 'collections.products_heading' | t }}</h2>
+            <ul
+              class="grid product-grid"
+              style="--cols-desktop: {{ columns }}; --cols-tablet: 3; --cols-mobile: {{ section.settings.columns_mobile }};"
+              role="list"
+            >
+              {%- for product in collection.products -%}
+                {%- liquid
+                  assign order = forloop.index0 | modulo: columns
+                  assign lazy = true
+                  if forloop.index <= 4
+                    assign lazy = false
+                  endif
+                -%}
+                <li>
+                  {%- render 'product-card', product: product, section_id: section.id, reveal_order: order, lazy: lazy -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": "section",
+  "class": "collection-grid-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4,
+      "info": "The sidebar layout uses at most 3 columns."
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "Filtering & sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true,
+      "info": "Choose filters with the Shopify Search & Discovery app."
+    },
+    {
+      "type": "select",
+      "id": "filter_layout",
+      "label": "Filter layout on desktop",
+      "options": [
+        { "value": "drawer", "label": "Drawer" },
+        { "value": "sidebar", "label": "Sidebar" }
+      ],
+      "default": "drawer"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,171 @@
+{%- liquid
+  assign blog = section.settings.blog
+  assign columns = section.settings.posts_to_show
+  assign has_posts = false
+  if blog != blank and blog.articles_count > 0
+    assign has_posts = true
+  endif
+-%}
+
+{%- if has_posts or request.design_mode -%}
+  <div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+    <div class="page-width">
+      {%- capture actions -%}
+        {%- if has_posts and section.settings.view_all_label != blank -%}
+          <a href="{{ blog.url }}" class="link">{{ section.settings.view_all_label | escape }} {% render 'icon', icon: 'arrow-right' %}</a>
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- render 'section-header',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        align: section.settings.heading_alignment,
+        actions: actions
+      -%}
+
+      <ul class="slider slider--desktop-grid journal-grid" style="--cols-desktop: {{ columns }}; --cols-tablet: 2; --slide-width: 82%;" role="list">
+        {%- if has_posts -%}
+          {%- for article in blog.articles limit: section.settings.posts_to_show -%}
+            {%- assign order = forloop.index0 | modulo: 3 -%}
+            <li data-reveal style="--reveal-order: {{ order }};">
+              <article class="category-card journal-card">
+                <a href="{{ article.url }}" class="category-card__media" style="--category-ratio: 4 / 3;" tabindex="-1" aria-hidden="true">
+                  {%- if article.image -%}
+                    {{ article.image | image_url: width: 1000 | image_tag: widths: '400, 600, 800, 1000', sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 82vw', loading: 'lazy', alt: '' }}
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </a>
+                <div class="category-card__body">
+                  {%- if section.settings.show_date -%}
+                    <p class="card__vendor">{{ article.published_at | time_tag: format: 'date' }}</p>
+                  {%- endif -%}
+                  <h3 class="category-card__title"><a href="{{ article.url }}" class="full-unstyled-link">{{ article.title | escape }}</a></h3>
+                  {%- if section.settings.show_excerpt -%}
+                    <p class="category-card__text">{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
+                  {%- endif -%}
+                  <span class="link journal-card__more" aria-hidden="true">{{ 'blogs.read_more' | t }} {% render 'icon', icon: 'arrow-right' %}</span>
+                </div>
+              </article>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..columns) -%}
+            <li>
+              <div class="category-card journal-card">
+                <div class="category-card__media" style="--category-ratio: 4 / 3;">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+                <div class="category-card__body">
+                  <h3 class="category-card__title">{{ 'sections.journal.placeholder_title' | t }}</h3>
+                  <p class="category-card__text">{{ 'sections.journal.placeholder_text' | t }}</p>
+                </div>
+              </div>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Journal",
+  "tag": "section",
+  "class": "featured-blog-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "The journal"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Notes on <em>skin & ritual</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "posts_to_show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Posts to show",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "\"View all\" label",
+      "default": "Read the journal"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 88
+    }
+  ],
+  "presets": [
+    {
+      "name": "Journal"
+    }
+  ]
+}
+{% endschema %}

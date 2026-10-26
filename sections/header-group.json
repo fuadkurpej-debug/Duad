@@ -1,0 +1,96 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "free-shipping": {
+          "type": "free_shipping",
+          "settings": {
+            "text": "Complimentary shipping on orders over [amount]",
+            "link": "/pages/shipping-returns"
+          }
+        },
+        "announcement-curated": {
+          "type": "announcement",
+          "settings": {
+            "text": "Curated skincare, body & beauty essentials",
+            "link": "/collections/all"
+          }
+        },
+        "announcement-makers": {
+          "type": "announcement",
+          "settings": {
+            "text": "Simple routines & guides in the journal",
+            "link": "/blogs/journal"
+          }
+        }
+      },
+      "block_order": ["free-shipping", "announcement-curated", "announcement-makers"],
+      "settings": {
+        "color_scheme": "scheme-4",
+        "autoplay": true,
+        "speed": 5
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "promo-skincare": {
+          "type": "mega_promo",
+          "settings": {
+            "menu_item": "Skincare",
+            "image": "shopify://shop_images/sb-category-serums.jpg",
+            "label": "The ritual",
+            "heading": "Build your three-step routine",
+            "link": "/collections/skincare",
+            "show_in_drawer": true
+          }
+        },
+        "promo-beauty": {
+          "type": "mega_promo",
+          "settings": {
+            "menu_item": "Beauty",
+            "image": "shopify://shop_images/sb-category-essentials.jpg",
+            "label": "Finishing touches",
+            "heading": "Beauty essentials",
+            "link": "/collections/beauty-essentials",
+            "show_in_drawer": false
+          }
+        },
+        "promo-shop": {
+          "type": "mega_promo",
+          "settings": {
+            "menu_item": "Shop All",
+            "image": "shopify://shop_images/sb-category-moisturizers.jpg",
+            "label": "Just landed",
+            "heading": "Discover new arrivals",
+            "link": "/collections/new-arrivals",
+            "show_in_drawer": false
+          }
+        }
+      },
+      "block_order": ["promo-skincare", "promo-beauty", "promo-shop"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "logo_width": 160,
+        "logo_width_mobile": 120,
+        "logo_position": "center",
+        "menu": "skin-beauty-main",
+        "sticky": "always",
+        "contact_link": "/pages/contact"
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

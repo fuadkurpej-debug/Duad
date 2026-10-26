@@ -1,0 +1,73 @@
+<article class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width page-width--narrow">
+    {%- render 'breadcrumbs' -%}
+    <header class="page-header" style="padding-top: 0;">
+      <p class="eyebrow">{{ article.published_at | time_tag: format: 'date' }}{% if article.author != blank %} · {{ article.author | escape }}{% endif %}</p>
+      <h1 class="h1">{{ article.title | escape }}</h1>
+    </header>
+  </div>
+  {%- if article.image -%}
+    <div class="page-width page-width--medium">
+      <div class="media media--landscape gap-top">
+        {%- assign alt = article.image.alt | default: article.title | escape -%}
+        {{ article.image | image_url: width: 2000 | image_tag: widths: '600, 900, 1200, 1600, 2000', sizes: '(min-width: 1200px) 1100px, 100vw', loading: 'eager', fetchpriority: 'high', alt: alt }}
+      </div>
+    </div>
+  {%- endif -%}
+  <div class="page-width page-width--narrow">
+    <div class="rte gap-top">{{ article.content }}</div>
+    {%- if article.tags.size > 0 -%}
+      <ul class="search-suggestions gap-top" role="list">
+        {%- for tag in article.tags -%}
+          <li><a class="chip" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    <div class="gap-top">
+      <button type="button" class="link" data-share data-url="{{ request.origin }}{{ article.url }}">{% render 'icon', icon: 'share' %}<span>{{ 'general.social.share' | t }}</span></button>
+    </div>
+    <div class="gap-top">
+      <a href="{{ blog.url }}" class="link">{% render 'icon', icon: 'arrow-left' %} {{ 'blogs.back_to' | t: title: blog.title | escape }}</a>
+    </div>
+  </div>
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "tag": "section",
+  "class": "main-article-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ]
+}
+{% endschema %}

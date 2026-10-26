@@ -1,0 +1,50 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+<div class="color-{{ section.settings.color_scheme }}">
+  <div class="page-width customer customer--narrow">
+    <div class="customer__card">
+      <h1 class="h2">{{ 'customer.register.title' | t }}</h1>
+      <p class="customer__intro">{{ 'customer.register.subtext' | t }}</p>
+      {%- form 'create_customer', novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="field">
+          <label class="field__label" for="RegisterFirstName">{{ 'customer.register.first_name' | t }}</label>
+          <input class="field__input" type="text" name="customer[first_name]" id="RegisterFirstName" autocomplete="given-name" {% if form.first_name %}value="{{ form.first_name }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterLastName">{{ 'customer.register.last_name' | t }}</label>
+          <input class="field__input" type="text" name="customer[last_name]" id="RegisterLastName" autocomplete="family-name" {% if form.last_name %}value="{{ form.last_name }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterEmail">{{ 'customer.login.email' | t }}</label>
+          <input class="field__input" type="email" name="customer[email]" id="RegisterEmail" autocomplete="email" autocorrect="off" autocapitalize="off" required {% if form.email %}value="{{ form.email }}"{% endif %}>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterPassword">{{ 'customer.login.password' | t }}</label>
+          <input class="field__input" type="password" name="customer[password]" id="RegisterPassword" autocomplete="new-password" required>
+        </div>
+        <label class="checkbox" for="RegisterMarketing">
+          <input type="checkbox" name="customer[accepts_marketing]" id="RegisterMarketing" value="true">
+          <span class="text-small">{{ 'customer.register.marketing' | t }}</span>
+        </label>
+        <button type="submit" class="button button--full">{{ 'customer.register.submit' | t }}</button>
+        <a href="{{ routes.account_login_url }}" class="link">{{ 'customer.register.have_account' | t }}</a>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer register",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,97 @@
+{%- comment -%}
+  Product card.
+  Params:
+  - product (required)
+  - section_id: used for unique form ids
+  - heading_tag: default h3
+  - lazy: default true
+  - sizes: image sizes attribute
+  - show_quick_add: defaults to theme setting
+  - reveal_order: stagger index for the reveal animation
+{%- endcomment -%}
+{%- liquid
+  assign heading_tag = heading_tag | default: 'h3'
+  case settings.card_image_ratio
+    when 'square'
+      assign ratio_css = '1 / 1'
+    when 'tall'
+      assign ratio_css = '3 / 4'
+    else
+      assign ratio_css = '4 / 5'
+  endcase
+
+  assign image_sizes = sizes | default: '(min-width: 1440px) 340px, (min-width: 990px) calc((100vw - 10rem) / 4), (min-width: 750px) calc((100vw - 6rem) / 3), calc((100vw - 2.75rem) / 2)'
+  assign loading = 'lazy'
+  if lazy == false
+    assign loading = 'eager'
+  endif
+
+  assign secondary = nil
+  if settings.card_show_secondary_image and product.media.size > 1
+    assign secondary = product.media[1]
+  endif
+
+  assign quick_add = show_quick_add | default: settings.card_show_quick_add, allow_false: true
+  assign image_alt = product.featured_media.alt | default: product.title | escape
+-%}
+{%- if settings.card_show_vendor -%}
+  {%- capture display_vendor -%}{%- render 'product-vendor', product: product -%}{%- endcapture -%}
+{%- endif -%}
+<div
+  class="card{% if secondary %} card--has-secondary{% endif %}{% if settings.card_image_fit == 'contain' %} card--contain{% endif %}"
+  style="--card-ratio: {{ ratio_css }};{% if reveal_order %} --reveal-order: {{ reveal_order }};{% endif %}"
+  data-reveal
+>
+  <div class="card__media">
+    {%- if product.featured_media -%}
+      {{
+        product.featured_media
+        | image_url: width: 1200
+        | image_tag:
+          widths: '240, 360, 480, 600, 720, 900, 1200',
+          sizes: image_sizes,
+          loading: loading,
+          class: 'card__image card__image--primary',
+          alt: image_alt
+      }}
+      {%- if secondary -%}
+        {{
+          secondary
+          | image_url: width: 1200
+          | image_tag:
+            widths: '240, 360, 480, 600, 720, 900, 1200',
+            sizes: image_sizes,
+            loading: 'lazy',
+            class: 'card__image card__image--secondary',
+            alt: ''
+        }}
+      {%- endif -%}
+    {%- else -%}
+      {%- render 'placeholder-product', product: product -%}
+    {%- endif -%}
+
+    {%- render 'product-badges', product: product -%}
+
+    {%- if quick_add and product.available -%}
+      {%- render 'quick-add', product: product, section_id: section_id -%}
+    {%- endif -%}
+  </div>
+
+  <div class="card__info">
+    {%- if display_vendor != blank -%}
+      <p class="card__vendor">{{ display_vendor }}</p>
+    {%- endif -%}
+    <{{ heading_tag }} class="card__title">
+      <a href="{{ product.url }}">{{ product.title | escape }}</a>
+    </{{ heading_tag }}>
+    {%- if settings.card_show_subtitle and product.metafields.custom.subtitle != blank -%}
+      <p class="card__subtitle">{{ product.metafields.custom.subtitle.value | escape }}</p>
+    {%- endif -%}
+    <div class="card__meta">
+      {%- render 'price', product: product -%}
+      {%- if settings.card_show_rating -%}
+        {%- render 'rating', product: product -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>

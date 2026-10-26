@@ -1,0 +1,169 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign layout = section.settings.filter_layout
+  assign columns = 4
+  if layout == 'sidebar'
+    assign columns = 3
+  endif
+  assign encoded_terms = search.terms | url_encode
+  assign clear_url = routes.search_url | append: '?q=' | append: encoded_terms | append: '&options%5Bprefix%5D=last'
+-%}
+<div class="color-{{ section.settings.color_scheme }}" data-facets-root>
+  <div class="page-width search-hero">
+    <h1 class="h1">{{ 'search.title' | t }}</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <label for="SearchPageInput" class="visually-hidden">{{ 'general.search.label' | t }}</label>
+      <input
+        id="SearchPageInput"
+        class="search-form__input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        autocomplete="off"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="icon-button search-form__submit" aria-label="{{ 'general.search.submit' | t }}">{% render 'icon', icon: 'search' %}</button>
+    </form>
+    {%- if search.performed -%}
+      <p class="search-hero__count" role="status">
+        {%- if search.results_count == 0 -%}
+          {{ 'general.search.no_results' | t: terms: search.terms | escape }}
+        {%- else -%}
+          {{ 'search.results_count' | t: count: search.results_count, terms: search.terms | escape }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  {%- if search.performed -%}
+    <div class="section" style="--pt: 8px; --pb: {{ section.settings.padding_bottom }}px;">
+      <div class="page-width">
+        {%- paginate search.results by section.settings.results_per_page -%}
+          <div class="facets-layout facets-layout--{{ layout }}">
+            {%- if search.filters.size > 0 or search.results_count > 0 -%}
+              {%- render 'facets',
+                results: search,
+                section_id: section.id,
+                layout: layout,
+                enable_filtering: section.settings.enable_filtering,
+                enable_sorting: section.settings.enable_sorting,
+                product_count: search.results_count,
+                clear_url: clear_url,
+                color_scheme: section.settings.color_scheme
+              -%}
+            {%- endif -%}
+
+            <div id="ProductGridContainer" class="product-grid-container" data-facets-render="grid-{{ section.id }}">
+              {%- if search.results.size == 0 -%}
+                <div class="collection-empty">
+                  <p class="h3">{{ 'search.empty_heading' | t }}</p>
+                  <p class="text-muted">{{ 'search.empty_text' | t }}</p>
+                  <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'general.shop_all' | t }}</a>
+                </div>
+              {%- else -%}
+                <ul class="grid product-grid" style="--cols-desktop: {{ columns }}; --cols-tablet: 3; --cols-mobile: 2;" role="list">
+                  {%- for item in search.results -%}
+                    {%- assign order = forloop.index0 | modulo: columns -%}
+                    <li>
+                      {%- case item.object_type -%}
+                        {%- when 'product' -%}
+                          {%- render 'product-card', product: item, section_id: section.id, reveal_order: order -%}
+                        {%- when 'article' -%}
+                          <a href="{{ item.url }}" class="search-result-card" data-reveal style="--reveal-order: {{ order }};">
+                            <span class="search-result-card__type">{{ 'search.types.article' | t }}</span>
+                            <h2 class="search-result-card__title">{{ item.title | escape }}</h2>
+                            <p class="search-result-card__text">{{ item.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
+                          </a>
+                        {%- when 'page' -%}
+                          <a href="{{ item.url }}" class="search-result-card" data-reveal style="--reveal-order: {{ order }};">
+                            <span class="search-result-card__type">{{ 'search.types.page' | t }}</span>
+                            <h2 class="search-result-card__title">{{ item.title | escape }}</h2>
+                            <p class="search-result-card__text">{{ item.content | strip_html | truncatewords: 22 }}</p>
+                          </a>
+                      {%- endcase -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                {%- render 'pagination', paginate: paginate -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endpaginate -%}
+      </div>
+    </div>
+  {%- else -%}
+    <div class="section" style="--pt: 16px; --pb: {{ section.settings.padding_bottom }}px;">
+      <div class="page-width">
+        {%- if settings.search_menu != blank and settings.search_menu.links.size > 0 -%}
+          <div class="center">
+            <ul class="search-suggestions" role="list" style="justify-content: center;">
+              {%- for link in settings.search_menu.links -%}
+                <li><a class="chip" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "search-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Results per page",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filter_layout",
+      "label": "Filter layout on desktop",
+      "options": [
+        { "value": "drawer", "label": "Drawer" },
+        { "value": "sidebar", "label": "Sidebar" }
+      ],
+      "default": "drawer"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,23 @@
+{%- comment -%}
+  Shared section heading.
+  Params: eyebrow, heading (inline rich text), text (rich text), align ('left' | 'center'),
+  heading_size ('h1' | 'h2'), actions (captured HTML shown on the right), heading_id
+{%- endcomment -%}
+{%- if eyebrow != blank or heading != blank or text != blank or actions != blank -%}
+  <div class="section-header{% if align == 'center' %} section-header--center{% endif %}">
+    <div>
+      {%- if eyebrow != blank -%}
+        <p class="eyebrow">{{ eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h2 class="{{ heading_size | default: 'h2' }}"{% if heading_id %} id="{{ heading_id }}"{% endif %}>{{ heading }}</h2>
+      {%- endif -%}
+      {%- if text != blank -%}
+        <div class="section-header__text">{{ text }}</div>
+      {%- endif -%}
+    </div>
+    {%- if actions != blank -%}
+      <div class="section-header__actions">{{ actions }}</div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

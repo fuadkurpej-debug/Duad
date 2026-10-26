@@ -1,0 +1,207 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "settings": {
+            "show_curated": true
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "subtitle": {
+          "type": "subtitle",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "link": "#shopify-product-reviews"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "style": "pills"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true,
+            "show_trust": true
+          }
+        },
+        "delivery": {
+          "type": "delivery",
+          "settings": {
+            "show_free_shipping": true,
+            "separate_tag": "ships-separately"
+          }
+        },
+        "complementary": {
+          "type": "complementary",
+          "settings": {
+            "heading": "Complete your ritual",
+            "fallback_related": true
+          }
+        },
+        "skin_types": {
+          "type": "skin_types",
+          "settings": {}
+        },
+        "ingredients": {
+          "type": "ingredients",
+          "settings": {
+            "heading": "Ingredients",
+            "open": false
+          }
+        },
+        "how_to_use": {
+          "type": "how_to_use",
+          "settings": {
+            "heading": "How to use",
+            "open": false
+          }
+        },
+        "shipping_returns": {
+          "type": "shipping_returns",
+          "settings": {
+            "heading": "Delivery",
+            "open": false,
+            "content": "<p>Shipping options and costs are shown at checkout before you pay.</p><p>Products can ship from different partner warehouses, so an order may arrive in more than one parcel.</p>"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "subtitle",
+        "rating",
+        "price",
+        "description",
+        "benefits",
+        "variant_picker",
+        "buy_buttons",
+        "delivery",
+        "complementary",
+        "skin_types",
+        "ingredients",
+        "how_to_use",
+        "shipping_returns",
+        "share"
+      ],
+      "settings": {
+        "gallery_layout": "grid",
+        "media_ratio": "portrait",
+        "media_size": "large",
+        "enable_zoom": true,
+        "show_breadcrumbs": true,
+        "sticky_atc": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
+        "padding_bottom": 80
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q-suits": {
+          "type": "question",
+          "settings": {
+            "question": "How do I know if this product suits my skin?",
+            "answer": "<p>Check the \"Suitable for\" details and, where provided, the full ingredient list on this page. If you have sensitive skin, patch-test on a small area first. Still unsure? Write to us — we're happy to help you choose.</p>"
+          }
+        },
+        "q-arrive": {
+          "type": "question",
+          "settings": {
+            "question": "When will my order arrive?",
+            "answer": "<p>Shipping options and costs are shown at checkout before you pay, and your order confirmation email includes a link to follow your order.</p>"
+          }
+        },
+        "q-parcels": {
+          "type": "question",
+          "settings": {
+            "question": "Why might my order arrive in more than one parcel?",
+            "answer": "<p>Our products ship from different partner warehouses, so an order with several items can arrive in separate parcels.</p>"
+          }
+        },
+        "q-return": {
+          "type": "question",
+          "disabled": true,
+          "settings": {
+            "question": "Can I return this product?",
+            "answer": "<p>Unopened products can be returned within [30] days of delivery. See our refund policy for the full details.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q-suits",
+        "q-arrive",
+        "q-parcels",
+        "q-return"
+      ],
+      "settings": {
+        "eyebrow": "Good to know",
+        "heading": "Questions, <em>answered</em>",
+        "button_label": "Contact us",
+        "button_link": "/pages/contact",
+        "layout": "split",
+        "structured_data": false,
+        "color_scheme": "scheme-2",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "eyebrow": "Complete the ritual",
+        "heading": "You may also <em>love</em>",
+        "heading_alignment": "left",
+        "intent": "related",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "padding_top": 88,
+        "padding_bottom": 104
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "recommendations"
+  ]
+}

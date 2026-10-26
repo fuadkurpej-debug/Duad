@@ -1,0 +1,31 @@
+{%- comment -%}
+  Compact recommendations loaded by <product-recommendations> in the cart drawer
+  and the "Complete your ritual" product block. Products already in the cart are skipped.
+{%- endcomment -%}
+<product-recommendations>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- liquid
+      assign cart_product_ids = cart.items | map: 'product_id'
+      assign shown = 0
+    -%}
+    <ul class="mini-recs__list" role="list">
+      {%- for product in recommendations.products -%}
+        {%- if cart_product_ids contains product.id or product.available == false -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if shown >= 3 -%}
+          {%- break -%}
+        {%- endif -%}
+        <li data-recommendation-item>{%- render 'mini-product', product: product -%}</li>
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</product-recommendations>
+
+{% schema %}
+{
+  "name": "Mini recommendations",
+  "settings": []
+}
+{% endschema %}

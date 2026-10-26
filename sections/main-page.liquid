@@ -1,0 +1,102 @@
+<div class="section color-{{ section.settings.color_scheme }}{% if section.settings.style == 'legal' %} legal-page{% endif %}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width {% if section.settings.width == 'narrow' %}page-width--narrow{% else %}page-width--medium{% endif %}">
+    {%- if section.settings.show_title -%}
+      <header class="page-header{% if section.settings.title_alignment == 'center' %} page-header--center{% endif %}" style="padding-top: 0;">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="h1">{{ page.title | escape }}</h1>
+        {%- if section.settings.style == 'legal' and section.settings.show_updated and page.published_at -%}
+          {%- assign updated = page.published_at | date: format: 'date' -%}
+          <p class="page-header__text text-small">{{ 'general.last_updated' | t: date: updated }}</p>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+    {%- if page.content != blank -%}
+      <div class="rte page-content{% if section.settings.title_alignment == 'center' and section.settings.style != 'legal' %} text-center{% endif %}">{{ page.content }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page content",
+  "tag": "section",
+  "class": "main-page-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "legal", "label": "Legal document" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show page title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_updated",
+      "label": "Show publish date (legal style)",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 64
+    }
+  ]
+}
+{% endschema %}

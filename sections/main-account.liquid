@@ -1,0 +1,74 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+<div class="color-{{ section.settings.color_scheme }}">
+  <div class="page-width customer">
+    <div class="account__header">
+      <div>
+        <p class="eyebrow">{{ 'customer.account.welcome' | t: name: customer.first_name | escape }}</p>
+        <h1 class="h1">{{ 'customer.account.title' | t }}</h1>
+      </div>
+      <a href="{{ routes.account_logout_url }}" class="link">{{ 'customer.account.log_out' | t }}</a>
+    </div>
+
+    <div class="account">
+      <div>
+        <h2 class="h3">{{ 'customer.account.orders' | t }}</h2>
+        {%- paginate customer.orders by 20 -%}
+          {%- if customer.orders.size > 0 -%}
+            <div class="table-wrap">
+              <table class="order-table">
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'customer.orders.order_number' | t }}</th>
+                    <th scope="col">{{ 'customer.orders.date' | t }}</th>
+                    <th scope="col">{{ 'customer.orders.payment_status' | t }}</th>
+                    <th scope="col">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                    <th scope="col">{{ 'customer.orders.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for order in customer.orders -%}
+                    <tr>
+                      <td data-label="{{ 'customer.orders.order_number' | t }}"><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                      <td data-label="{{ 'customer.orders.date' | t }}">{{ order.created_at | time_tag: format: 'date' }}</td>
+                      <td data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+                      <td data-label="{{ 'customer.orders.fulfillment_status' | t }}">{{ order.fulfillment_status_label }}</td>
+                      <td data-label="{{ 'customer.orders.total' | t }}">{{ order.total_net_amount | money_with_currency }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+            {%- render 'pagination', paginate: paginate -%}
+          {%- else -%}
+            <p class="text-muted">{{ 'customer.orders.none' | t }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'general.shop_all' | t }}</a>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+
+      <aside class="account-panel">
+        <h2 class="h3">{{ 'customer.account.details' | t }}</h2>
+        {%- if customer.default_address -%}
+          <address style="font-style: normal;">{{ customer.default_address | format_address }}</address>
+        {%- else -%}
+          <p class="text-muted">{{ 'customer.addresses.none' | t }}</p>
+        {%- endif -%}
+        <a href="{{ routes.account_addresses_url }}" class="link gap-top">{{ 'customer.account.view_addresses' | t: count: customer.addresses_count }}</a>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer account",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

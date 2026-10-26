@@ -1,0 +1,102 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_description": true,
+        "show_image": true,
+        "show_breadcrumbs": true,
+        "color_scheme": "scheme-2"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "enable_filtering": true,
+        "filter_layout": "drawer",
+        "enable_sorting": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 32,
+        "padding_bottom": 96
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "blocks": {
+        "benefit-curated": {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Thoughtfully curated",
+            "text": "<p>Chosen for texture, formula and routine.</p>"
+          }
+        },
+        "benefit-honest": {
+          "type": "benefit",
+          "settings": {
+            "icon": "flask",
+            "title": "Clear & honest",
+            "text": "<p>Clear details and only genuine reviews.</p>"
+          }
+        },
+        "benefit-secure": {
+          "type": "benefit",
+          "settings": {
+            "icon": "lock",
+            "title": "Secure checkout",
+            "text": "<p>Encrypted payments through Shopify.</p>"
+          }
+        },
+        "benefit-returns": {
+          "type": "benefit",
+          "settings": {
+            "icon": "return",
+            "title": "Easy returns",
+            "text": "<p>Unopened products within [30] days.</p>"
+          },
+          "disabled": true
+        },
+        "benefit-costs": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "title": "Costs shown upfront",
+            "text": "<p>Shipping costs appear at checkout, before you pay.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "benefit-curated",
+        "benefit-honest",
+        "benefit-secure",
+        "benefit-returns",
+        "benefit-costs"
+      ],
+      "settings": {
+        "style": "plain",
+        "alignment": "center",
+        "columns": 4,
+        "color_scheme": "scheme-2",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "benefits"
+  ]
+}

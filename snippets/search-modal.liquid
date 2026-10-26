@@ -1,0 +1,84 @@
+{%- comment -%} Search panel with predictive results (opens from the header). {%- endcomment -%}
+<side-drawer
+  id="SearchDrawer"
+  class="drawer drawer--top search-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'general.search.title' | t }}"
+  aria-hidden="true"
+>
+  <div class="drawer__overlay" data-drawer-close></div>
+  <div class="drawer__panel" tabindex="-1">
+    <div class="page-width search-drawer__inner">
+      <predictive-search data-enabled="{{ settings.predictive_search_enabled }}">
+        <div class="search-drawer__top">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+            <label for="SearchDrawerInput" class="visually-hidden">{{ 'general.search.label' | t }}</label>
+            <input
+              id="SearchDrawerInput"
+              class="search-form__input"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'general.search.placeholder' | t }}"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-describedby="PredictiveStatus"
+              data-drawer-autofocus
+            >
+            <input type="hidden" name="options[prefix]" value="last">
+            <button type="submit" class="icon-button search-form__submit" aria-label="{{ 'general.search.submit' | t }}">
+              {%- render 'icon', icon: 'search' -%}
+            </button>
+          </form>
+          <button type="button" class="icon-button" data-drawer-close aria-label="{{ 'general.search.close' | t }}">
+            {%- render 'icon', icon: 'close' -%}
+          </button>
+        </div>
+
+        <div class="predictive-search">
+          <div data-predictive-default>
+            <div class="predictive-search__results">
+              {%- if settings.search_menu != blank and settings.search_menu.links.size > 0 -%}
+                <div>
+                  <h3 class="predictive-search__heading">{{ 'general.search.popular' | t }}</h3>
+                  <ul class="search-suggestions" role="list">
+                    {%- for link in settings.search_menu.links -%}
+                      <li><a class="chip" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+              {%- if settings.search_collection != blank and settings.search_collection.products_count > 0 -%}
+                <div>
+                  <h3 class="predictive-search__heading">{{ settings.search_collection.title | escape }}</h3>
+                  <ul class="predictive-search__products" role="list">
+                    {%- for product in settings.search_collection.products limit: 4 -%}
+                      <li>
+                        <a class="predictive-product" href="{{ product.url }}">
+                          <div class="media">
+                            {%- if product.featured_media -%}
+                              {{ product.featured_media | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 750px) 15vw, 45vw', alt: '' }}
+                            {%- else -%}
+                              {%- render 'placeholder-product', product: product -%}
+                            {%- endif -%}
+                          </div>
+                          <span class="predictive-product__title">{{ product.title | escape }}</span>
+                          {%- render 'price', product: product, show_unit: false -%}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+          <p id="PredictiveStatus" class="visually-hidden" role="status" aria-live="polite" data-predictive-status></p>
+          <div id="PredictiveResults" data-predictive-results hidden></div>
+        </div>
+      </predictive-search>
+    </div>
+  </div>
+</side-drawer>

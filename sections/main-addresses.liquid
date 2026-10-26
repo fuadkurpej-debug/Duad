@@ -1,0 +1,71 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+
+<div class="color-{{ section.settings.color_scheme }}">
+  <div class="page-width customer">
+    <div class="account__header">
+      <div>
+        <a href="{{ routes.account_url }}" class="link">{% render 'icon', icon: 'arrow-left' %} {{ 'customer.account.return' | t }}</a>
+        <h1 class="h1 gap-top">{{ 'customer.addresses.title' | t }}</h1>
+      </div>
+    </div>
+
+    {%- paginate customer.addresses by 10 -%}
+      <ul class="address-list" role="list">
+        {%- for address in customer.addresses -%}
+          <li class="address-card">
+            {%- if address == customer.default_address -%}
+              <span class="badge">{{ 'customer.addresses.default' | t }}</span>
+            {%- endif -%}
+            <address>{{ address | format_address }}</address>
+            <details class="accordion">
+              <summary>
+                <span class="accordion__title">{{ 'customer.addresses.edit' | t }}</span>
+                <span class="accordion__toggle" aria-hidden="true"></span>
+              </summary>
+              {%- render 'address-form', address: address, form_type: 'edit' -%}
+            </details>
+            <div class="address-card__actions">
+              {%- form 'customer_address', address -%}
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="link" onclick="return confirm({{ 'customer.addresses.delete_confirm' | t | json | escape }});">{{ 'customer.addresses.delete' | t }}</button>
+              {%- endform -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+
+    <div class="account-panel gap-top">
+      <h2 class="h3">{{ 'customer.addresses.add_new' | t }}</h2>
+      {%- render 'address-form', address: customer.new_address, form_type: 'new' -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!window.Shopify || !Shopify.CountryProvinceSelector) return;
+    document.querySelectorAll('[data-address-country]').forEach(function (select) {
+      var id = select.dataset.addressCountry;
+      new Shopify.CountryProvinceSelector('AddressCountry-' + id, 'AddressProvince-' + id, {
+        hideElement: 'AddressProvinceContainer-' + id
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Customer addresses",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

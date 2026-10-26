@@ -1,0 +1,232 @@
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      text: section.settings.text,
+      align: 'center'
+    -%}
+
+    <ul
+      class="benefits__grid benefits--{{ section.settings.style }}{% if section.settings.alignment == 'left' %} benefits--left{% endif %}"
+      style="--cols: {{ section.settings.columns }};"
+      role="list"
+    >
+      {%- for block in section.blocks -%}
+        {%- assign order = forloop.index0 | modulo: 4 -%}
+        <li class="benefit" {{ block.shopify_attributes }} data-reveal style="--reveal-order: {{ order }};">
+          <span class="benefit__icon" aria-hidden="true">
+            {%- if block.settings.custom_icon != blank -%}
+              {{ block.settings.custom_icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: '' }}
+            {%- else -%}
+              {%- render 'icon', icon: block.settings.icon -%}
+            {%- endif -%}
+          </span>
+          {%- if block.settings.title != blank -%}
+            <h3 class="benefit__title">{{ block.settings.title | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="benefit__text">{{ block.settings.text }}</div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.note != blank -%}
+      <p class="reviews__note">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand benefits",
+  "tag": "section",
+  "class": "benefits-section",
+  "max_blocks": 8,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Only list promises your business keeps every day (returns window, delivery, support). Edit the placeholder numbers in [brackets]."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Why Skin & Beauty"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Beauty you can <em>trust</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "cards", "label": "Cards" },
+        { "value": "plain", "label": "Plain" }
+      ],
+      "default": "cards"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Footnote"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "drop", "label": "Drop" },
+            { "value": "flower", "label": "Flower" },
+            { "value": "flask", "label": "Formula" },
+            { "value": "face", "label": "Face" },
+            { "value": "hand", "label": "Care" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "truck", "label": "Delivery" },
+            { "value": "package", "label": "Package" },
+            { "value": "return", "label": "Returns" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "chat", "label": "Chat" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "layers", "label": "Layers" },
+            { "value": "feather", "label": "Lightweight" },
+            { "value": "smile", "label": "Smile" }
+          ],
+          "default": "sparkle"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "Optional. Replaces the icon."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Thoughtfully curated"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Describe a benefit you can stand behind.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand benefits",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Thoughtfully curated",
+            "text": "<p>Every product is chosen for its texture, its formula and the place it earns in a simple routine.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "flask",
+            "title": "Honest by design",
+            "text": "<p>Clear product details, costs shown before you pay and only genuine customer reviews — never invented ones.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "lock",
+            "title": "Secure checkout",
+            "text": "<p>Pay safely through Shopify's encrypted checkout with the payment methods you trust.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "return",
+            "title": "Easy returns",
+            "text": "<p>Changed your mind? Return unopened products within [30] days — see our returns policy.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

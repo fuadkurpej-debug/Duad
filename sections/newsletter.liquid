@@ -1,0 +1,193 @@
+{%- liquid
+  assign form_id = 'NewsletterForm-' | append: section.id
+  assign image = section.settings.image
+  if section.settings.alignment == 'left'
+    assign justify = 'start'
+    assign align = 'left'
+  else
+    assign justify = 'center'
+    assign align = 'center'
+  endif
+-%}
+<div class="section" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;" id="Newsletter-{{ section.id }}">
+  <div class="{% if section.settings.full_width %}page-width--full{% else %}page-width{% endif %}">
+    <div class="newsletter color-{{ section.settings.color_scheme }}{% if image != blank %} newsletter--with-image{% endif %}{% if section.settings.image_position == 'right' %} newsletter--image-right{% endif %}{% if section.settings.full_width %} newsletter--full{% endif %}" data-reveal>
+      {%- if image != blank -%}
+        <div class="newsletter__media">
+          {{ image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: '' }}
+        </div>
+      {%- endif -%}
+      <div class="newsletter__content" style="--justify: {{ justify }}; --align: {{ align }};">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="newsletter__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.incentive != blank -%}
+          <p class="newsletter__incentive chip chip--soft">{% render 'icon', icon: 'gift', class: 'icon--small' %}{{ section.settings.incentive | escape }}</p>
+        {%- endif -%}
+
+        {%- form 'customer', id: form_id, class: 'newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="form-message" role="status">{% render 'icon', icon: 'check' %}<span>{{ 'newsletter.success' | t }}</span></p>
+          {%- else -%}
+            <div class="newsletter-form__row">
+              <div class="field">
+                <label class="visually-hidden" for="NewsletterEmail-{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+                <input
+                  id="NewsletterEmail-{{ section.id }}"
+                  type="email"
+                  name="contact[email]"
+                  class="field__input"
+                  value="{{ form.email }}"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  placeholder="{{ 'newsletter.placeholder' | t }}"
+                  required
+                  {% if form.errors %}
+                    aria-invalid="true" aria-describedby="NewsletterError-{{ section.id }}"
+                  {% endif %}
+                >
+              </div>
+              <button type="submit" class="button">{{ section.settings.button_label | default: 'Subscribe' | escape }}</button>
+            </div>
+            {%- if form.errors -%}
+              <p class="form-message form-message--error" id="NewsletterError-{{ section.id }}" role="alert">
+                {{- form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email -}}
+              </p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- if section.settings.fine_print != blank -%}
+          <div class="newsletter__fine-print">{{ section.settings.fine_print }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "newsletter-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Subscribers are added to Customers with email marketing consent. Only promise an incentive you have actually set up as a discount."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "The Skin & Beauty letter"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Rituals, new arrivals <em>& first looks</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Thoughtful skincare notes, new arrivals and early access to launches — a few considered emails a month, never clutter.</p>"
+    },
+    {
+      "type": "text",
+      "id": "incentive",
+      "label": "Sign-up incentive",
+      "info": "Optional, e.g. 10% off your first order. Create the matching discount first."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "richtext",
+      "id": "fine_print",
+      "label": "Consent note",
+      "default": "<p>By subscribing you agree to receive marketing emails from us. Unsubscribe anytime. See our <a href=\"/policies/privacy-policy\">privacy policy</a> for details.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

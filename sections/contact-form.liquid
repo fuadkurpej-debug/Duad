@@ -1,0 +1,180 @@
+{%- assign form_id = 'ContactForm-' | append: section.id -%}
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    <div class="contact">
+      <div class="contact__info">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow eyebrow--line">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="text-muted rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <ul class="contact__info-list" role="list">
+            {%- for block in section.blocks -%}
+              <li class="contact__info-item" {{ block.shopify_attributes }}>
+                <span class="info-card__icon" aria-hidden="true">{% render 'icon', icon: block.settings.icon %}</span>
+                <div>
+                  <p class="contact__info-title">{{ block.settings.title | escape }}</p>
+                  <div class="contact__info-text rte">{{ block.settings.text }}</div>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <div>
+        {%- form 'contact', id: form_id, class: 'contact__form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="form-message" role="status" tabindex="-1">{% render 'icon', icon: 'check' %}<span>{{ 'contact.form.success' | t }}</span></p>
+          {%- elsif form.errors -%}
+            <div class="form-message form-message--error" role="alert">
+              {%- render 'icon', icon: 'info' -%}
+              <div>
+                <p>{{ 'contact.form.error_heading' | t }}</p>
+                {{ form.errors | default_errors }}
+              </div>
+            </div>
+          {%- endif -%}
+          <div class="contact__form-row">
+            <div class="field">
+              <label class="field__label" for="ContactName-{{ section.id }}">{{ 'contact.form.name' | t }}</label>
+              <input class="field__input" id="ContactName-{{ section.id }}" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+            </div>
+            <div class="field">
+              <label class="field__label" for="ContactEmail-{{ section.id }}">{{ 'contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+              <input class="field__input" id="ContactEmail-{{ section.id }}" type="email" name="contact[email]" autocomplete="email" spellcheck="false" autocapitalize="off" required aria-required="true" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+            </div>
+          </div>
+          <div class="contact__form-row">
+            <div class="field">
+              <label class="field__label" for="ContactPhone-{{ section.id }}">{{ 'contact.form.phone' | t }}</label>
+              <input class="field__input" id="ContactPhone-{{ section.id }}" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}">
+            </div>
+            <div class="field">
+              <label class="field__label" for="ContactOrder-{{ section.id }}">{{ 'contact.form.order' | t }}</label>
+              <input class="field__input" id="ContactOrder-{{ section.id }}" type="text" name="contact[order_number]" value="">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="ContactBody-{{ section.id }}">{{ 'contact.form.message' | t }} <span aria-hidden="true">*</span></label>
+            <textarea class="field__input" id="ContactBody-{{ section.id }}" name="contact[body]" rows="6" required aria-required="true">{{ form.body }}</textarea>
+          </div>
+          <div>
+            <button type="submit" class="button button--large">{{ 'contact.form.send' | t }}</button>
+          </div>
+          {%- if section.settings.privacy_note != blank -%}
+            <div class="newsletter__fine-print" style="max-width: none;">{{ section.settings.privacy_note }}</div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "section",
+  "class": "contact-form-section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Customer care"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're here to <em>help</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Questions about an order, a product or your routine? Send us a message and a real person from our team will reply.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "privacy_note",
+      "label": "Privacy note",
+      "default": "<p>We only use your details to answer your message. See our <a href=\"/policies/privacy-policy\">privacy policy</a> for more.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "info",
+      "name": "Contact detail",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "mail", "label": "Mail" },
+            { "value": "chat", "label": "Chat" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "pin", "label": "Location" },
+            { "value": "package", "label": "Package" }
+          ],
+          "default": "mail"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Email"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>hello@yourdomain.com</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

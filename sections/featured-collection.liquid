@@ -1,0 +1,212 @@
+{%- assign brand_text = settings.brand_name | default: shop.name -%}
+{%- liquid
+  assign collection = section.settings.collection
+  assign columns = section.settings.columns_desktop
+  assign has_products = false
+  if collection != blank and collection.products_count > 0
+    assign has_products = true
+  endif
+  assign is_carousel = false
+  if section.settings.desktop_layout == 'carousel'
+    assign is_carousel = true
+  endif
+-%}
+
+{%- if has_products or request.design_mode -%}
+  <div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+    <div class="page-width">
+      <slider-component>
+        {%- capture actions -%}
+          {%- if is_carousel -%}
+            <div class="slider-controls">
+              <button type="button" class="slider-button" data-slider-prev aria-label="{{ 'accessibility.previous_slide' | t }}">{% render 'icon', icon: 'arrow-left' %}</button>
+              <button type="button" class="slider-button" data-slider-next aria-label="{{ 'accessibility.next_slide' | t }}">{% render 'icon', icon: 'arrow-right' %}</button>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_view_all and has_products -%}
+            <a href="{{ collection.url }}" class="link">{{ section.settings.view_all_label | escape }} {% render 'icon', icon: 'arrow-right' %}</a>
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- render 'section-header',
+          eyebrow: section.settings.eyebrow,
+          heading: section.settings.heading,
+          text: section.settings.text,
+          align: section.settings.heading_alignment,
+          actions: actions
+        -%}
+
+        <ul
+          class="{% if section.settings.mobile_layout == 'slider' or is_carousel %}slider{% unless is_carousel %} slider--desktop-grid{% endunless %}{% else %}grid{% endif %}"
+          style="--cols-desktop: {{ columns }}; --cols-tablet: 3; --cols-mobile: 2; --slide-width: 68%;"
+          role="list"
+          data-slider-track
+        >
+          {%- if has_products -%}
+            {%- for product in collection.products limit: section.settings.products_to_show -%}
+              {%- assign order = forloop.index0 | modulo: columns -%}
+              <li>
+                {%- render 'product-card', product: product, section_id: section.id, reveal_order: order -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <li>
+                <div class="card">
+                  <div class="card__media">{%- render 'placeholder-product', index: i -%}</div>
+                  <div class="card__info">
+                    <p class="card__vendor">{{ brand_text | escape }}</p>
+                    <h3 class="card__title">{{ 'sections.featured_collection.placeholder_title' | t }}</h3>
+                    <p class="price">{{ 4200 | money }}</p>
+                  </div>
+                </div>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+
+        {%- if section.settings.show_view_all and has_products and section.settings.button_below -%}
+          <div class="center gap-top">
+            <a href="{{ collection.url }}" class="button button--secondary">{{ section.settings.view_all_label | escape }}</a>
+          </div>
+        {%- endif -%}
+      </slider-component>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "featured-collection-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Our edit"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the <em>edit</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Tip: a collection sorted by \"Best selling\" always shows your genuine top sellers."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "label": "Products to show",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "slider", "label": "Swipe" },
+        { "value": "grid", "label": "2-column grid" }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "\"View all\" label",
+      "default": "View all"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_below",
+      "label": "Also show button below products",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

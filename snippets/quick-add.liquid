@@ -1,0 +1,66 @@
+{%- comment -%}
+  Quick add for product cards. Works without JavaScript (posts to /cart/add).
+  Single-variant products add straight away; others open a small option panel.
+  Params: product, section_id
+{%- endcomment -%}
+{%- liquid
+  assign form_id = 'QuickAdd-' | append: section_id | append: '-' | append: product.id
+  assign single = false
+  if product.has_only_default_variant or product.variants.size == 1
+    assign single = true
+  endif
+  if product.options.size == 1
+    assign option_label = 'products.product.choose' | t: option: product.options.first
+  else
+    assign option_label = 'products.product.choose_options' | t
+  endif
+-%}
+{%- if single -%}
+  <product-form class="quick-add">
+    {%- form 'product', product, id: form_id, novalidate: 'novalidate' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+      <button
+        type="submit"
+        class="quick-add__submit"
+        aria-label="{{ 'products.product.quick_add_to' | t: title: product.title | escape }}"
+      >
+        {%- render 'icon', icon: 'plus' -%}
+        <span class="quick-add__label" aria-hidden="true">{{ 'products.product.quick_add' | t }}</span>
+      </button>
+    {%- endform -%}
+  </product-form>
+{%- else -%}
+  <details class="quick-add">
+    <summary class="quick-add__summary" aria-label="{{ 'products.product.choose_options_for' | t: title: product.title | escape }}">
+      {%- render 'icon', icon: 'plus' -%}
+      <span class="quick-add__label" aria-hidden="true">{{ 'products.product.quick_add' | t }}</span>
+    </summary>
+    <div class="quick-add__panel">
+      <product-form>
+        {%- form 'product', product, id: form_id, novalidate: 'novalidate' -%}
+          <input type="hidden" name="quantity" value="1">
+          <p class="quick-add__panel-title">{{ option_label }}</p>
+          <div class="quick-add__options">
+            {%- for variant in product.variants limit: 12 -%}
+              <button
+                type="submit"
+                name="id"
+                value="{{ variant.id }}"
+                class="quick-add__option"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {{ variant.title | escape }}
+              </button>
+            {%- endfor -%}
+          </div>
+          {%- if product.variants.size > 12 -%}
+            <a href="{{ product.url }}" class="link gap-top">{{ 'products.product.view_details' | t }}</a>
+          {%- endif -%}
+        {%- endform -%}
+      </product-form>
+    </div>
+  </details>
+{%- endif -%}

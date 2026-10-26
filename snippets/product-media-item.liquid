@@ -1,0 +1,53 @@
+{%- comment -%}
+  One gallery item. Params: media, product, enable_zoom, zoom_index, position (1-based), eager (bool),
+  extra (bool): hidden on desktop until "Show all" is pressed
+{%- endcomment -%}
+<li class="product-gallery__item product-gallery__item--{{ media.media_type }}{% if extra %} is-extra{% endif %}" data-media-id="{{ media.id }}">
+  {%- case media.media_type -%}
+    {%- when 'image' -%}
+      {%- liquid
+        assign loading = 'lazy'
+        assign priority = 'auto'
+        if eager
+          assign loading = 'eager'
+          assign priority = 'high'
+        endif
+        assign alt_text = media.alt | default: product.title | escape
+      -%}
+      {%- if enable_zoom -%}
+        <button type="button" class="product-gallery__zoom" data-zoom-index="{{ zoom_index }}" aria-label="{{ 'products.product.media.open_zoom' | t: index: position }}">
+      {%- else -%}
+        <div class="product-gallery__frame">
+      {%- endif -%}
+      {{
+        media
+        | image_url: width: 1800
+        | image_tag:
+          widths: '400, 600, 800, 1000, 1200, 1500, 1800',
+          sizes: '(min-width: 1440px) 760px, (min-width: 990px) calc(55vw - 5rem), 100vw',
+          loading: loading,
+          fetchpriority: priority,
+          alt: alt_text
+      }}
+      {%- if enable_zoom -%}
+        <span class="product-gallery__zoom-icon" aria-hidden="true">{% render 'icon', icon: 'zoom' %}</span>
+        </button>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+    {%- when 'video' -%}
+      <div class="product-gallery__frame product-gallery__frame--video">
+        {{ media | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1200x' }}
+      </div>
+    {%- when 'external_video' -%}
+      <div class="product-gallery__frame product-gallery__frame--video">
+        {{ media | external_video_tag: loading: 'lazy' }}
+      </div>
+    {%- else -%}
+      <div class="product-gallery__frame">
+        {%- if media.preview_image -%}
+          {{ media.preview_image | image_url: width: 1500 | image_tag: loading: 'lazy', alt: media.alt }}
+        {%- endif -%}
+      </div>
+  {%- endcase -%}
+</li>

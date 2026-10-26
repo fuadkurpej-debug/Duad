@@ -1,0 +1,179 @@
+{%- comment -%}
+  Before & after comparison. Renders on the store ONLY when both images are set AND the
+  merchant confirms the images are genuine, unretouched and published with consent.
+{%- endcomment -%}
+{%- liquid
+  assign before = section.settings.before_image
+  assign after = section.settings.after_image
+  assign ready = false
+  if before != blank and after != blank and section.settings.confirm_authentic
+    assign ready = true
+  endif
+-%}
+
+{%- if ready or request.design_mode -%}
+  <div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+    <div class="page-width">
+      {%- if ready -%}
+        <div class="before-after">
+          <before-after data-reveal>
+            <div class="ba" style="--ba-ratio: {{ before.aspect_ratio }};">
+              {{ before | image_url: width: 1600 | image_tag: widths: '500, 800, 1100, 1400, 1600', sizes: '(min-width: 990px) 55vw, 100vw', loading: 'lazy', alt: section.settings.before_label }}
+              <div class="ba__after">
+                {{ after | image_url: width: 1600 | image_tag: widths: '500, 800, 1100, 1400, 1600', sizes: '(min-width: 990px) 55vw, 100vw', loading: 'lazy', alt: section.settings.after_label }}
+              </div>
+              <span class="badge badge--own ba__label ba__label--before">{{ section.settings.before_label | escape }}</span>
+              <span class="badge badge--own ba__label ba__label--after">{{ section.settings.after_label | escape }}</span>
+              <input
+                class="ba__range"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                aria-label="{{ 'sections.before_after.slider_label' | t }}"
+              >
+              <div class="ba__divider" aria-hidden="true">
+                <span class="ba__knob">{% render 'icon', icon: 'chevron-left' %}{% render 'icon', icon: 'chevron-right' %}</span>
+              </div>
+            </div>
+          </before-after>
+          <div class="image-text__content" data-reveal style="--reveal-order: 1;">
+            {%- if section.settings.eyebrow != blank -%}
+              <p class="eyebrow eyebrow--line">{{ section.settings.eyebrow | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <h2 class="h1">{{ section.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if section.settings.text != blank -%}
+              <div class="image-text__text rte">{{ section.settings.text }}</div>
+            {%- endif -%}
+            {%- if section.settings.product != blank -%}
+              <div class="button-group">
+                <a href="{{ section.settings.product.url }}" class="button">{{ 'products.product.view_details' | t }}</a>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.disclaimer != blank -%}
+              <p class="before-after__disclaimer">{{ section.settings.disclaimer | escape }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="editor-placeholder">
+          {%- render 'icon', icon: 'info' -%}
+          <p>{{ 'sections.before_after.editor_hint' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Before & after",
+  "tag": "section",
+  "class": "before-after-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use only genuine, unretouched photos of a real customer who agreed in writing to their publication, taken under the same lighting. Never use stock or AI-generated images. Results claims must be truthful and typical."
+    },
+    {
+      "type": "checkbox",
+      "id": "confirm_authentic",
+      "label": "I confirm these photos are genuine and shared with consent",
+      "info": "Unretouched photos of a real customer who agreed in writing to their publication.",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image",
+      "info": "Use the same size and framing as the before image."
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After 4 weeks"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Real results"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "See the difference"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Describe the routine used, for how long, and the person's skin type.</p>"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product used"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "Individual results vary. Images shared with the customer's permission and not retouched."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before & after"
+    }
+  ]
+}
+{% endschema %}

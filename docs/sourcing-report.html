@@ -1,0 +1,544 @@
+<title>Skin & Beauty Sourcing Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one reading column for the store owner, the store's own palette and type, wide tables scroll in place */
+  :root {
+    --bg: #FBF8F4;
+    --surface: #F3ECE4;
+    --fg: #2B2420;
+    --muted: #6E615A;
+    --line: #E3D8CC;
+    --accent: #8C6A3F;
+    --ok: #3E6B4A;   --ok-bg: #E3EEE4;
+    --warn: #8A5A12; --warn-bg: #F6E9D2;
+    --bad: #9A3B32;  --bad-bg: #F6DEDA;
+    --display: "Cormorant Garamond", "Cormorant", Georgia, serif;
+    --body: "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1C1714; --surface: #262019; --fg: #F1E9E0; --muted: #B5A79B; --line: #3A3129; --accent: #D9BE96;
+      --ok: #9FD1AA; --ok-bg: #1F3326; --warn: #E8C27A; --warn-bg: #3A2E17; --bad: #F0A49A; --bad-bg: #3D221F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1C1714; --surface: #262019; --fg: #F1E9E0; --muted: #B5A79B; --line: #3A3129; --accent: #D9BE96;
+    --ok: #9FD1AA; --ok-bg: #1F3326; --warn: #E8C27A; --warn-bg: #3A2E17; --bad: #F0A49A; --bad-bg: #3D221F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 15.5px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 72px; display: grid; gap: 56px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.08; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.3rem, 1.6rem + 3vw, 3.6rem); letter-spacing: -0.01em; }
+  h2 { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.35rem); }
+  h3 { font-size: 1.35rem; }
+  p { margin: 0; max-width: 68ch; }
+  a { color: var(--accent); text-underline-offset: 0.2em; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.86rem; }
+  section { display: grid; gap: 18px; min-width: 0; }
+  header.top { display: grid; gap: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.86rem; color: var(--muted); }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+  nav.toc a { font-size: 0.82rem; text-decoration: none; color: var(--fg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  nav.toc a:hover { border-color: var(--accent); }
+
+  .verdict { background: var(--surface); border-radius: 18px; padding: 22px 24px; display: grid; gap: 12px; }
+  .verdict p { max-width: 80ch; }
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 820px) { .cols { grid-template-columns: 1fr; } }
+  .col { border-top: 2px solid var(--line); padding-top: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .col.done { border-color: var(--ok); }
+  .col.block { border-color: var(--bad); }
+  .col.you { border-color: var(--warn); }
+  .col ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: 0.92rem; }
+
+  .chip { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .chip.ok { color: var(--ok); background: var(--ok-bg); }
+  .chip.warn { color: var(--warn); background: var(--warn-bg); }
+  .chip.bad { color: var(--bad); background: var(--bad-bg); }
+  .chip.pick { color: var(--bg); background: var(--fg); }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--surface); position: sticky; top: 0; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.82rem; white-space: nowrap; }
+  tr.group td { background: var(--surface); font-family: var(--display); font-size: 1.1rem; font-weight: 600; }
+  .wide { min-width: 980px; }
+  .mid { min-width: 820px; }
+
+  /* Margin calculator */
+  .calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; background: var(--surface); border-radius: 18px; padding: 22px 24px; }
+  @media (max-width: 760px) { .calc { grid-template-columns: 1fr; } }
+  .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+  .field { display: grid; gap: 4px; }
+  .field label { font-size: 0.78rem; color: var(--muted); }
+  .field input { font: inherit; font-family: var(--mono); font-size: 0.95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; width: 100%; }
+  .result { display: grid; gap: 10px; align-content: start; }
+  .big { font-family: var(--display); font-size: 2.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .rows { display: grid; gap: 4px; font-size: 0.9rem; }
+  .rows div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-block: 4px; }
+  .rows span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .reset { justify-self: start; font: inherit; font-size: 0.82rem; background: none; border: 1px solid var(--line); color: var(--fg); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .panel ul, .panel ol { margin: 0; padding-left: 1.15em; display: grid; gap: 6px; font-size: 0.92rem; }
+  ol.check { counter-reset: none; padding-left: 1.3em; display: grid; gap: 10px; }
+  ol.check li { padding-left: 4px; }
+  code { font-family: var(--mono); font-size: 0.85em; background: var(--surface); padding: 1px 5px; border-radius: 5px; }
+  .links { display: grid; gap: 8px; font-size: 0.92rem; }
+  .links div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .sources { columns: 2 320px; font-size: 0.8rem; color: var(--muted); padding-left: 1.1em; }
+  .sources li { break-inside: avoid; margin-bottom: 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">My Store 2 · wzdavt-r6.myshopify.com · 26 October 2026</p>
+  <h1>Skin &amp; Beauty sourcing &amp; launch report</h1>
+  <p class="muted">Product research, supplier routes, margins, compliance and the store work done for a supplier-fulfilled skincare, body and hair care store selling to the USA and EU.</p>
+  <nav class="toc" aria-label="Sections">
+    <a href="#status">Status</a>
+    <a href="#suppliers">Suppliers</a>
+    <a href="#products">Products</a>
+    <a href="#margins">Margins</a>
+    <a href="#compliance">Compliance</a>
+    <a href="#automation">Automation</a>
+    <a href="#store">Store changes</a>
+    <a href="#links">Links</a>
+    <a href="#approval">Your approvals</a>
+  </nav>
+</header>
+
+<section id="status">
+  <div class="verdict">
+    <p class="eyebrow">Bottom line</p>
+    <h2>The store is ready to receive products. No products were imported.</h2>
+    <p>Supplier-side verification was not possible from my side: the CJ catalogue, prices, shipping quotes and product documents sit behind your CJ login, and outside websites are blocked from my environment (only web search worked). Products added through the Shopify API would also not be linked to CJ for automatic fulfilment. To follow your own rule of excluding anything that can't be verified, I imported nothing. Below are the shortlist and exact checks, so the products can be listed from the CJ app (or from a brand distributor) in a few clicks once their data and documents are confirmed.</p>
+  </div>
+  <div class="cols">
+    <div class="col done">
+      <h3>Done in Shopify</h3>
+      <ul>
+        <li>CJ warehouse added to the shipping profile (it was unassigned, so CJ products would have had no shipping at checkout)</li>
+        <li>United States and European Union markets created as <strong>drafts</strong></li>
+        <li>New collections: Brazilian Rituals, Gift Sets (plus Body &amp; Hair, Body Care, Hair Care from earlier)</li>
+        <li>Menu and three homepage sections that appear automatically once products are tagged</li>
+        <li>Supplier-ready theme, backed up and exported (see Store changes)</li>
+      </ul>
+    </div>
+    <div class="col block">
+      <h3>Blocked on my side</h3>
+      <ul>
+        <li>CJ catalogue, costs, shipping quotes and documents: need your CJ login</li>
+        <li>Supplier and brand websites: network access blocked in this environment</li>
+        <li>Shopify Collective: not available for stores in Montenegro or in EUR</li>
+        <li>Shopify Flow workflows can't be created through the API</li>
+        <li>Store previews: storefront domain blocked here</li>
+      </ul>
+    </div>
+    <div class="col you">
+      <h3>Needs you</h3>
+      <ul>
+        <li>Payment provider (current one supports a single currency)</li>
+        <li>EU Responsible Person and CPNP for any cosmetic sold in the EU</li>
+        <li>Supplier accounts, quotes and product listing from CJ</li>
+        <li>Shipping rates for US and EU, then activating the draft markets</li>
+      </ul>
+      <p class="small"><a href="#approval">Full checklist</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="suppliers">
+  <p class="eyebrow">Supplier routes</p>
+  <h2>Supplier comparison</h2>
+  <p class="muted">What each route offers for the USA and EU, based on your store's installed apps and public sources. "Verified" means I checked it directly in your Shopify store.</p>
+  <div class="table-scroll">
+    <table class="wide">
+      <thead>
+        <tr><th>Route</th><th>Status in your store</th><th>Cost to you</th><th>Automation</th><th>USA</th><th>EU</th><th>Authentic brands &amp; documents</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CJdropshipping</strong><br><span class="small muted">App "CJdropshipping: Much Faster"</span></td>
+          <td><span class="chip ok">Installed · verified</span><br><span class="small">Own fulfilment location with inventory sync enabled. No products imported yet.</span></td>
+          <td>No subscription required to list; you pay product + shipping per order</td>
+          <td>Order sync, fulfilment and tracking sync per CJ's app listing; inventory sync confirmed in your store</td>
+          <td>China warehouses plus a US warehouse (CJ-associated listing claims 4–10 days for US stock). <span class="chip warn">Check per product</span></td>
+          <td>No EU processing times found. <span class="chip warn">Check per product</span></td>
+          <td>Mostly unbranded/OEM; private label available. EU documents (Responsible Person, CPNP, safety report) not provided by default: ask before listing.</td>
+          <td><span class="chip pick">Primary</span> for US-market body/hair products and accessories; EU cosmetics only with documents</td>
+        </tr>
+        <tr>
+          <td><strong>Syncee</strong></td>
+          <td><span class="chip warn">Not installed</span></td>
+          <td>Free to browse. Paid plans to import and sync orders: Basic about $39.99/month (25–50 products, sources conflict); $1 for the first 30 days on Shopify</td>
+          <td>Automated order sync on paid plans; 0% transaction fee</td>
+          <td>US suppliers</td>
+          <td>EU and UK suppliers: the best route to products already sold legally in the EU</td>
+          <td>Varies by supplier; ask each one for CPNP number and Responsible Person</td>
+          <td><span class="chip warn">Needs approval</span> Best second route for EU, after you approve the subscription</td>
+        </tr>
+        <tr>
+          <td><strong>Brazilian brand distributors</strong><br><span class="small muted">Lola from Rio (US wholesale form), Natura US, Granado, Inoar</span></td>
+          <td><span class="chip warn">Not contacted</span></td>
+          <td>Wholesale pricing on request; dropship terms not published</td>
+          <td>Usually manual order forwarding unless the distributor offers an integration</td>
+          <td>Lola: sold at Walmart US via distributor; Natura: US launch of Ekos Cacau (2025)</td>
+          <td>Lola: strong in Portugal and Spain; Granado: Paris, Lisbon, London stores</td>
+          <td><span class="chip ok">Authentic</span> Brand already handles compliance in markets where it sells</td>
+          <td><span class="chip pick">Contact</span> for the hero Brazilian products; ask for dropship terms</td>
+        </tr>
+        <tr>
+          <td><strong>BTSWholesaler</strong> (EU branded cosmetics)</td>
+          <td><span class="chip warn">Not connected</span></td>
+          <td>Wholesale account</td>
+          <td>Product feeds (CSV/XML/JSON); no confirmed Shopify app</td>
+          <td>Listed as able to sell to the US (per a plugin vendor)</td>
+          <td>Ships from within Europe</td>
+          <td>17,000+ references from 600+ brands with EAN codes; ask whether they carry Brazilian brands</td>
+          <td>Optional EU route for branded products</td>
+        </tr>
+        <tr>
+          <td><strong>Shopify Collective</strong></td>
+          <td><span class="chip bad">Not available</span></td>
+          <td colspan="5">Shopify Collective does not operate in this store's country or currency.</td>
+          <td>Not usable</td>
+        </tr>
+        <tr>
+          <td><strong>Other apps Shopify suggests</strong></td>
+          <td><span class="chip warn">Not installed</span></td>
+          <td colspan="5"><a href="https://apps.shopify.com/dropshipper-ai">Dropshipper-ai</a> (vetted US and EU suppliers) · <a href="https://apps.shopify.com/syncee-1">Syncee AI Dropship</a> (US, EU and UK) · <a href="https://apps.shopify.com/dropcommerce">DropCommerce</a> (US and Canadian suppliers). Pricing and terms not checked.</td>
+          <td>Only if Syncee and CJ fall short</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="products">
+  <p class="eyebrow">Product research</p>
+  <h2>Shortlist: 20 candidates, 10 picks for the first catalogue</h2>
+  <p class="muted">Every candidate shows what is backed by a source and what still needs checking. Retail benchmarks are public prices for the same or a comparable product; they are not your costs. None of these is verified for supply or documents yet, so none was imported.</p>
+  <div class="table-scroll">
+    <table class="wide">
+      <thead>
+        <tr><th>#</th><th>Product</th><th>Category</th><th>Why it fits</th><th class="num">Retail benchmark</th><th>Route</th><th>US</th><th>EU</th><th>Next check</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="9">Authentic Brazilian brands</td></tr>
+        <tr><td>1 <span class="chip pick">Pick</span></td><td>Lola from Rio Morte Súbita Intensive Hair Mask, 450 g</td><td>Hair mask</td><td>Recognisable Brazilian brand with a large-format mask; sold at Walmart US</td><td class="num">$16.99 Walmart</td><td>Lola USA wholesale</td><td><span class="chip warn">Distributor</span></td><td><span class="chip warn">Distributor</span></td><td>Dropship terms, cost, EU seller</td></tr>
+        <tr><td>2 <span class="chip pick">Pick</span></td><td>Lola from Rio Meu Cacho Minha Vida Moisturizing Mask, 450 g</td><td>Hair mask (curls)</td><td>Curly-hair line; also sold by Superdrug UK</td><td class="num">$15.99 Walmart</td><td>Lola USA wholesale</td><td><span class="chip warn">Distributor</span></td><td><span class="chip warn">Distributor</span></td><td>Same as above</td></tr>
+        <tr><td>3 <span class="chip pick">Pick</span></td><td>Lola from Rio Rapunzel Strengthening Mask, 450 g</td><td>Hair mask</td><td>Completes a 3-mask routine bundle</td><td class="num">$16.99 Walmart</td><td>Lola USA wholesale</td><td><span class="chip warn">Distributor</span></td><td><span class="chip warn">Distributor</span></td><td>Don't copy "hair growth" wording from retail listings</td></tr>
+        <tr><td>4</td><td>Lola from Rio A Fórmula Lamellar Gloss Mask, 450 g</td><td>Hair mask</td><td>Gloss/shine angle</td><td class="num">Not found</td><td>Lola USA wholesale</td><td><span class="chip warn">Distributor</span></td><td><span class="chip warn">Distributor</span></td><td>Price and availability</td></tr>
+        <tr><td>5</td><td>Lola from Rio Densidade Hair Mask, 230 g</td><td>Hair mask</td><td>Lower price point</td><td class="num">$13.99 Walmart</td><td>Lola USA wholesale</td><td><span class="chip warn">Distributor</span></td><td><span class="chip warn">Distributor</span></td><td>Margin likely too thin alone</td></tr>
+        <tr><td>6 <span class="chip pick">Pick</span></td><td>Inoar Absolut Daymoist Mask, 250 g</td><td>Hair mask</td><td>Professional Brazilian salon brand; higher price point</td><td class="num">£33.35 Superdrug UK</td><td>Distributor (unconfirmed)</td><td><span class="chip warn">Unknown</span></td><td><span class="chip warn">UK seller</span></td><td>Find authorised US/EU distributor</td></tr>
+        <tr><td>7 <span class="chip pick">Pick</span></td><td>Natura Ekos Cacau body line</td><td>Body care</td><td>Amazonian ingredients; Ekos Cacau launched in the US in 2025</td><td class="num">Not verified</td><td>Natura US</td><td><span class="chip warn">Contact</span></td><td><span class="chip warn">Contact</span></td><td>Wholesale or affiliate options</td></tr>
+        <tr><td>8 <span class="chip pick">Pick</span></td><td>Granado bath &amp; body (Rio pharmacy, est. 1870)</td><td>Body care / gifts</td><td>Heritage packaging, very giftable; stores in New York, Paris, Lisbon, London</td><td class="num">Not found</td><td>Brand / distributor</td><td><span class="chip warn">Contact</span></td><td><span class="chip warn">Contact</span></td><td>Distributor and terms</td></tr>
+        <tr><td>9</td><td>Nutrius Brazilian Body Butter Cream, 6 fl oz</td><td>Body butter</td><td>Cupuaçu-infused, US brand</td><td class="num">$19.99 Walmart (was)</td><td>Brand / Faire-type wholesale</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Unlikely</span></td><td>Wholesale terms</td></tr>
+        <tr class="group"><td colspan="9">Private label through CJ (already connected)</td></tr>
+        <tr><td>10 <span class="chip pick">Pick</span></td><td>Cupuaçu &amp; murumuru whipped body butter</td><td>Body butter</td><td>Body butter is led by the Brazilian-inspired Sol de Janeiro (22.5% share, Simporter, Apr 2026); cupuaçu is its signature butter</td><td class="num">Category: $20–48</td><td>CJ private label</td><td><span class="chip warn">Check US stock</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Find listing, full INCI, MSDS, US warehouse</td></tr>
+        <tr><td>11 <span class="chip pick">Pick</span></td><td>Brazilian-inspired fragrance body mist</td><td>Body / scent</td><td>Scent-led body care; Brazilian perfume trends 2026</td><td class="num">Not verified</td><td>CJ private label</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Allergen list (fragrance), IFRA, shipping class for aerosols/alcohol</td></tr>
+        <tr><td>12 <span class="chip pick">Pick</span></td><td>Dry body oil (Brazil nut or pracaxi)</td><td>Body oil</td><td>Dry, fast-absorbing oils are the fastest-growing body-oil format in Brazil (IndexBox)</td><td class="num">Not verified</td><td>CJ private label</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Oil origin and INCI</td></tr>
+        <tr><td>13</td><td>Murumuru repair hair mask</td><td>Hair mask</td><td>Private-label alternative to branded masks</td><td class="num">Not verified</td><td>CJ private label</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Listing and INCI</td></tr>
+        <tr><td>14</td><td>Lightweight hair oil (pracaxi or argan)</td><td>Hair oil</td><td>Easy add-on to masks</td><td class="num">Not verified</td><td>CJ private label</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Listing and INCI</td></tr>
+        <tr><td>15</td><td>Açaí or coffee body scrub</td><td>Body scrub</td><td>Completes a body ritual</td><td class="num">Not verified</td><td>CJ private label</td><td><span class="chip warn">Check</span></td><td><span class="chip bad">Needs RP + CPNP</span></td><td>Listing and INCI</td></tr>
+        <tr><td>16 <span class="chip pick">Pick</span></td><td>Body ritual gift set (butter + mist + oil)</td><td>Gift set</td><td>Raises order value; feeds the new Gift Sets collection</td><td class="num">—</td><td>Bundle of 10–12</td><td><span class="chip warn">After 10–12</span></td><td><span class="chip bad">After 10–12</span></td><td>Gift box option at CJ</td></tr>
+        <tr class="group"><td colspan="9">Non-cosmetic accessories (no CPNP; EU product-safety rules still apply)</td></tr>
+        <tr><td>17</td><td>Satin hair bonnet and scrunchie set</td><td>Hair accessory</td><td>Low regulatory burden, pairs with masks</td><td class="num">Not verified</td><td>CJ</td><td><span class="chip warn">Check</span></td><td><span class="chip warn">EU economic operator</span></td><td>Material and size</td></tr>
+        <tr><td>18</td><td>Exfoliating body mitt</td><td>Body tool</td><td>Ritual add-on</td><td class="num">Not verified</td><td>CJ</td><td><span class="chip warn">Check</span></td><td><span class="chip warn">EU economic operator</span></td><td>Material</td></tr>
+        <tr><td>19</td><td>Scalp massager brush</td><td>Hair tool</td><td>Add-on for hair routine</td><td class="num">Not verified</td><td>CJ</td><td><span class="chip warn">Check</span></td><td><span class="chip warn">EU economic operator</span></td><td>Material</td></tr>
+        <tr><td>20</td><td>Facial roller or gua sha</td><td>Face tool</td><td>Fits existing Beauty Essentials collection</td><td class="num">Not verified</td><td>CJ</td><td><span class="chip warn">Check</span></td><td><span class="chip warn">EU economic operator</span></td><td>Stone type claims</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Why these 10 picks</h3>
+      <ul>
+        <li><strong>Hero authenticity:</strong> real Brazilian brands (Lola, Inoar, Natura, Granado) carry the positioning and their own compliance. They need a distributor deal first.</li>
+        <li><strong>Margin engine:</strong> CJ private-label body butter, mist and oil can carry your own label and higher margins, but only once their ingredient lists and documents are confirmed.</li>
+        <li><strong>Order value:</strong> branded masks retail at $14–17 in the US, too low to carry ad costs alone. Sell them as a 3-mask routine or with an oil, and use the gift set to lift baskets.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Before listing any product, confirm</h3>
+      <ul>
+        <li>Exact supplier listing, variant and warehouse (US and/or EU)</li>
+        <li>Product cost, shipping cost and delivery time per country</li>
+        <li>Full INCI list exactly as on the label, net content, batch and expiry handling</li>
+        <li>For the EU: Responsible Person name and address, CPNP notification, safety report (CPSR)</li>
+        <li>Photos you're allowed to use (CJ listings or brand-supplied)</li>
+        <li>Return and damage policy of the supplier</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="margins">
+  <p class="eyebrow">Profit analysis</p>
+  <h2>Margin calculator</h2>
+  <p class="muted">The starting values are an <strong>example</strong>, not a supplier quote. Replace them with the CJ or distributor quote for each product. Payment fees depend on the provider you choose; 3% + €0.30 is a placeholder.</p>
+  <div class="calc">
+    <form class="fields" id="calc" autocomplete="off">
+      <div class="field"><label for="price">Selling price (€)</label><input id="price" type="number" step="0.01" min="0" value="34"></div>
+      <div class="field"><label for="cost">Product cost (€)</label><input id="cost" type="number" step="0.01" min="0" value="7.50"></div>
+      <div class="field"><label for="ship">Shipping cost to customer (€)</label><input id="ship" type="number" step="0.01" min="0" value="6"></div>
+      <div class="field"><label for="ads">Marketing cost per order (€)</label><input id="ads" type="number" step="0.01" min="0" value="8"></div>
+      <div class="field"><label for="fee">Payment fee (%)</label><input id="fee" type="number" step="0.1" min="0" value="3"></div>
+      <div class="field"><label for="fixed">Payment fixed fee (€)</label><input id="fixed" type="number" step="0.01" min="0" value="0.30"></div>
+      <div class="field"><label for="refund">Refunds &amp; damages reserve (%)</label><input id="refund" type="number" step="0.1" min="0" value="3"></div>
+      <div class="field"><label for="target">Target margin after marketing (%)</label><input id="target" type="number" step="1" min="0" max="90" value="25"></div>
+    </form>
+    <div class="result" aria-live="polite">
+      <p class="eyebrow">Profit per order</p>
+      <div class="big" id="profit">€0.00</div>
+      <p id="verdict" class="small"></p>
+      <div class="rows">
+        <div><span>Revenue</span><span id="r-rev"></span></div>
+        <div><span>Product + shipping</span><span id="r-landed"></span></div>
+        <div><span>Payment fees</span><span id="r-fees"></span></div>
+        <div><span>Refund reserve</span><span id="r-refund"></span></div>
+        <div><span>Marketing</span><span id="r-ads"></span></div>
+        <div><span>Margin</span><span id="r-margin"></span></div>
+        <div><span>Highest product + shipping cost for your target</span><span id="r-max"></span></div>
+        <div><span>Lowest price for your target</span><span id="r-minprice"></span></div>
+      </div>
+      <button type="button" class="reset" id="reset">Reset example values</button>
+    </div>
+  </div>
+  <div class="table-scroll">
+    <table class="mid" id="buybox">
+      <thead><tr><th>Selling price</th><th class="num">Highest product + shipping cost to hit your target</th><th>Use for</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="small muted">The table uses the fee, reserve, marketing and target values above. If a CJ quote (product + shipping) is above the figure for your planned price, raise the price, bundle, or skip the product.</p>
+</section>
+
+<section id="compliance">
+  <p class="eyebrow">Regulations</p>
+  <h2>Compliance before selling</h2>
+  <div class="grid2">
+    <div class="panel">
+      <h3>European Union</h3>
+      <ul>
+        <li>Every cosmetic needs a <strong>Responsible Person established in the EU</strong> and a <strong>CPNP notification</strong> before it is sold (Regulation 1223/2009).</li>
+        <li>A Product Information File with a safety report signed by a qualified assessor must exist and be kept for 10 years.</li>
+        <li>Shipping from outside the EU straight to EU customers usually makes you the importer, so you may become the Responsible Person unless one is appointed.</li>
+        <li>Benchmark cost for a safety report, PIF and CPNP: about £130–£465 per product (one provider's estimate).</li>
+        <li>Accessories aren't cosmetics, but EU product-safety rules (GPSR) require an EU-based economic operator for consumer products sold in the EU.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>United States (MoCRA)</h3>
+      <ul>
+        <li>Businesses with under about $1 million average annual US cosmetic sales are exempt from facility registration and product listing, except for certain product types such as eye-area products.</li>
+        <li>The "responsible person" is the manufacturer, packer or distributor named on the label; with private label that may be you.</li>
+        <li>Labels still need a full ingredient declaration and a US contact for adverse-event reports; serious adverse events must be reported to the FDA.</li>
+        <li>Confirm your status with the FDA's MoCRA pages or a regulatory adviser before launch.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Claims to keep out of listings</h3>
+    <p class="small">Retail listings for some of these products use drug-like wording such as "hair growth", "anti-acne", "whitening" or "repairs damage permanently". Don't copy it. Use cosmetic wording such as "softens", "smooths the look of", "leaves hair feeling".</p>
+  </div>
+</section>
+
+<section id="automation">
+  <p class="eyebrow">Automation</p>
+  <h2>What is automated and what stays manual</h2>
+  <div class="table-scroll">
+    <table class="mid">
+      <thead><tr><th>Area</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Shipping for CJ products</td><td><span class="chip ok">Done · verified</span></td><td>CJ fulfilment location added to the General shipping profile. Rates are unchanged (€9.60 Montenegro, €17.00 international), so review them against CJ quotes.</td></tr>
+        <tr><td>Inventory sync</td><td><span class="chip ok">Enabled by CJ</span></td><td>CJ's fulfilment service has inventory management on. Stock updates arrive once products are listed from the CJ app.</td></tr>
+        <tr><td>Collections and merchandising</td><td><span class="chip ok">Done</span></td><td>Products sort themselves by tag or product type (for example <code>body-care</code>, <code>hair-care</code>, <code>brazilian-ritual</code>, <code>gift-set</code>). Homepage sections and menu links appear once a collection has products.</td></tr>
+        <tr><td>Supplier names and sold-out display</td><td><span class="chip ok">Done</span></td><td>The theme hides supplier names such as "CJ Dropshipping" and shows "Sold out" from real stock.</td></tr>
+        <tr><td>Product mapping, order forwarding, tracking sync</td><td><span class="chip warn">You, in the CJ app</span></td><td>List products from CJ to Shopify as drafts (this creates the mapping), turn on automatic order sync and tracking sync, choose a shipping method per country, and enable price-change alerts.</td></tr>
+        <tr><td>Paying CJ for orders</td><td><span class="chip warn">Needs approval</span></td><td>Orders are paid from your CJ balance or card. Automatic payment is a financial setting, so I left it to you.</td></tr>
+        <tr><td>Out-of-stock protection</td><td><span class="chip warn">You, in Flow</span></td><td>Flow is installed. Add the templates "Hide out-of-stock products" and "Publish products when restocked". The API can't create Flow workflows.</td></tr>
+        <tr><td>Price safeguards</td><td><span class="chip warn">You, in CJ</span></td><td>Set CJ's pricing rule (cost × multiplier, rounding) and check the margin table above before publishing.</td></tr>
+        <tr><td>Customer service, returns, documents</td><td><span class="chip bad">Manual</span></td><td>Always manual: replies, return approvals, collecting compliance documents.</td></tr>
+        <tr><td>Test without charges</td><td><span class="chip warn">You</span></td><td>Use Shopify's Bogus Gateway or a test order with a 100% discount on a draft-priced product, then cancel it in CJ before payment.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="store">
+  <p class="eyebrow">Shopify work</p>
+  <h2>Store and theme changes</h2>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Today</h3>
+      <ul>
+        <li>CJ fulfilment location added to the shipping profile</li>
+        <li>Draft markets: United States (1 country) and European Union (27 countries), in EUR because the current payment provider supports one currency</li>
+        <li>Collections Brazilian Rituals (<code>brazilian-ritual</code>) and Gift Sets (<code>gift-set</code>), with search descriptions</li>
+        <li>Main menu: both under Shop All; Brazilian Rituals also under Body &amp; Hair; Gift Sets under Beauty</li>
+        <li>Homepage: "Brazilian body rituals" carousel, "Body &amp; hair" grid, "Gift sets" carousel; each stays hidden until it has products</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Earlier in this project</h3>
+      <ul>
+        <li>Supplier-ready theme: hidden supplier names, "Read more" for long descriptions, desktop image limit with "Show all", variant-image colour swatches, two-line titles, cleaned supplier HTML</li>
+        <li>Body &amp; Hair, Body Care, Hair Care collections; tag routing for every category; New Arrivals and Best Sellers include all active products</li>
+        <li>"Brand shown on store" product field for the real maker</li>
+        <li>Copy reworded to promises a dropshipping store can keep; draft policies updated</li>
+        <li>Theme backup and full theme ZIP</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="links">
+  <p class="eyebrow">Links</p>
+  <h2>Previews and backups</h2>
+  <div class="links">
+    <div><strong>Skin &amp; Beauty theme (unpublished)</strong> <a href="https://wzdavt-r6.myshopify.com/?preview_theme_id=187592474733">Preview</a> <a href="https://admin.shopify.com/store/wzdavt-r6/themes/187592474733/editor">Theme editor</a></div>
+    <div><strong>Backup: Skin &amp; Beauty — backup 2026-10-26</strong> <a href="https://wzdavt-r6.myshopify.com/?preview_theme_id=187893710957">Preview</a></div>
+    <div><strong>Markets</strong> <a href="https://admin.shopify.com/store/wzdavt-r6/settings/markets">Settings → Markets</a></div>
+    <div><strong>Shipping</strong> <a href="https://admin.shopify.com/store/wzdavt-r6/settings/shipping">Settings → Shipping and delivery</a></div>
+    <div><strong>CJ app</strong> <a href="https://admin.shopify.com/store/wzdavt-r6/apps/cucheng">Open in Shopify admin</a></div>
+  </div>
+  <p class="small muted">The store is password-protected, so the preview asks for the storefront password. The theme ZIP and import guide are in your session files.</p>
+</section>
+
+<section id="approval">
+  <p class="eyebrow">Your decisions</p>
+  <h2>Approval checklist</h2>
+  <ol class="check">
+    <li><strong>Payment provider.</strong> Choose one that works for a Montenegro business and supports several currencies (needed for USD in the US market).</li>
+    <li><strong>EU route.</strong> Either appoint an EU Responsible Person and notify each cosmetic on CPNP, or start the EU with branded products already on the EU market and accessories only.</li>
+    <li><strong>CJ.</strong> Log in, check each pick (listing, US/EU warehouse, cost, INCI, documents), list approved ones as drafts, turn on order and tracking sync, and decide on automatic payment.</li>
+    <li><strong>Brand distributors.</strong> Send the Lola from Rio US wholesale form and contact Natura US, Granado and an Inoar distributor about dropship terms and documents.</li>
+    <li><strong>Syncee</strong> (optional, paid): approve a plan if you want EU-based suppliers.</li>
+    <li><strong>Shipping rates.</strong> Set US and EU rates from supplier quotes. Your international zone is missing 13 EU countries (BG, HR, CY, EE, GR, HU, LV, LT, LU, MT, RO, SK, SI).</li>
+    <li><strong>Activate markets</strong> United States and European Union once 1–6 are done.</li>
+    <li><strong>Business details.</strong> Store name, legal entity, contact details and the draft policies (unchanged from before).</li>
+    <li><strong>Optional:</strong> allow <code>wzdavt-r6.myshopify.com</code> and <code>cdn.shopify.com</code> in this environment's network settings so I can take previews.</li>
+  </ol>
+</section>
+
+<section>
+  <p class="eyebrow">Sources</p>
+  <ul class="sources">
+    <li><a href="https://www.walmart.com/global/seller/101597767">Walmart: Lola from Rio seller page (prices)</a></li>
+    <li><a href="https://www.walmart.com/c/kp/meus-cachos">Walmart: Meu Cacho Minha Vida mask</a></li>
+    <li><a href="https://www.superdrug.com/hair/hair-treatments/hair-masks/lola-from-rio-meu-cacho-minha-vida-hydration-mask-500ml/p/mp-00239320">Superdrug: Lola from Rio mask</a></li>
+    <li><a href="https://lolafromriousa.com/pages/wholesale-sign-up">Lola from Rio USA wholesale sign-up</a></li>
+    <li><a href="https://www.ourlatinxmagazine.com/post/beauty-without-borders-how-lola-from-rio-is-reshaping-hair-care-in-the-u-s">Lola from Rio US distribution</a></li>
+    <li><a href="https://wwd.com/beauty-industry-news/beauty-features/brazilian-beauty-brands-international-markets-1236155994/">WWD: Brazilian brands abroad</a></li>
+    <li><a href="https://superdrug.com/hair/hair-treatments/hair-masks/inoar-daymoist-mask-250g/p/mp-00142638">Superdrug: Inoar Daymoist mask</a></li>
+    <li><a href="https://marcaspelomundo.com.br/agencias/bullet-assina-lancamento-internacional-da-linha-ekos-cacau-nos-eua/">Natura Ekos Cacau US launch</a></li>
+    <li><a href="https://www.istitutomarangoni.com/en/maze35/beauty/how-granado-turned-brazilian-fragrances-into-a-global-sensory-obsession">Granado international presence</a></li>
+    <li><a href="https://www.walmart.com/c/kp/cupuacu">Walmart: Nutrius Brazilian body butter</a></li>
+    <li><a href="https://simporter.com/trends/body-butter/">Simporter: body butter trends, Apr 2026</a></li>
+    <li><a href="https://gravelai.com/brands-using/cupuacu-butter">Brands using cupuaçu butter</a></li>
+    <li><a href="https://www.indexbox.io/store/brazil-body-oil-market-analysis-forecast-size-trends-and-insights/">IndexBox: Brazil body oil market</a></li>
+    <li><a href="https://www.accio-ai.com/blog/brazilian-perfume-trends-defining-the-scent-landscape">Brazilian perfume trends 2026</a></li>
+    <li><a href="https://www.spocket.co/blogs/cjdropshipping-overview">CJdropshipping review (competitor source)</a></li>
+    <li><a href="https://apps.apple.com/app/id1458056352">CJ Dropshipping app listing</a></li>
+    <li><a href="https://www.syncee.com/pricing">Syncee pricing</a></li>
+    <li><a href="https://intercom.help/syncee/en/articles/1238592-pricing-and-plans">Syncee help: plans</a></li>
+    <li><a href="https://syncee.com/page/beauty-dropshipping">Syncee beauty suppliers</a></li>
+    <li><a href="https://meetanshi.com/magento-2-btswholesaler-dropshipping.html">BTSWholesaler catalogue and markets</a></li>
+    <li><a href="https://www.hpra.ie/regulation/cosmetics/obligations-of-responsible-persons/the-responsible-person-for-cosmetic-products">HPRA: Responsible Person</a></li>
+    <li><a href="https://santesecu.public.lu/en/espace-professionnel/departement-sante/pharmacies-et-medicaments/produits-cosmetiques/personne-responsable.html">Luxembourg authority: Responsible Person</a></li>
+    <li><a href="https://www.certifiedcosmetics.com/?p=16374">Dropshipping cosmetics legal requirements</a></li>
+    <li><a href="https://euverify.com/resource/choosing-a-cosmetics-responsible-person/">Euverify: RP and CPNP costs</a></li>
+    <li><a href="https://www.registrarcorp.com/blog/cosmetics/mocra/mocra-exemptions/">Registrar Corp: MoCRA exemptions</a></li>
+    <li><a href="https://bclplaw.com/en-US/events-insights-news/part-2-in-mocra-series-fda-guidance-on-facility-registrations.html">BCLP: MoCRA facility registration</a></li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+(function () {
+  var ids = ['price', 'cost', 'ship', 'ads', 'fee', 'fixed', 'refund', 'target'];
+  var defaults = { price: 34, cost: 7.5, ship: 6, ads: 8, fee: 3, fixed: 0.3, refund: 3, target: 25 };
+  var KEY = 'sb-margin-calc';
+  var fmt = function (n) { return (n < 0 ? '−€' : '€') + Math.abs(n).toFixed(2); };
+  var val = function (id) { var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved) ids.forEach(function (id) { if (saved[id] !== undefined) document.getElementById(id).value = saved[id]; });
+  } catch (e) {}
+
+  function render() {
+    var p = val('price'), c = val('cost'), s = val('ship'), a = val('ads');
+    var f = val('fee') / 100, fx = val('fixed'), r = val('refund') / 100, t = val('target') / 100;
+    var fees = p * f + fx, reserve = p * r, landed = c + s;
+    var profit = p - landed - fees - reserve - a;
+    var margin = p > 0 ? profit / p : 0;
+    var maxLanded = p * (1 - f - r - t) - fx - a;
+    var denom = 1 - f - r - t;
+    var minPrice = denom > 0 ? (landed + fx + a) / denom : NaN;
+
+    document.getElementById('profit').textContent = fmt(profit);
+    document.getElementById('r-rev').textContent = fmt(p);
+    document.getElementById('r-landed').textContent = fmt(-landed);
+    document.getElementById('r-fees').textContent = fmt(-fees);
+    document.getElementById('r-refund').textContent = fmt(-reserve);
+    document.getElementById('r-ads').textContent = fmt(-a);
+    document.getElementById('r-margin').textContent = (margin * 100).toFixed(1) + '%';
+    document.getElementById('r-max').textContent = fmt(maxLanded);
+    document.getElementById('r-minprice').textContent = isNaN(minPrice) ? '—' : fmt(minPrice);
+    var verdict = document.getElementById('verdict');
+    if (profit <= 0) verdict.textContent = 'Loses money at this price. Raise the price, bundle, or lower costs.';
+    else if (margin < t) verdict.textContent = 'Profitable, but below your target margin.';
+    else verdict.textContent = 'Meets your target margin.';
+
+    var rows = '';
+    [19, 24, 29, 34, 39, 49, 59].forEach(function (price) {
+      var m = price * (1 - f - r - t) - fx - a;
+      var use = price < 25 ? 'Add-ons, accessories' : price < 40 ? 'Single hero products' : 'Sets and bundles';
+      rows += '<tr><td class="num">' + fmt(price) + '</td><td class="num">' + fmt(m) + '</td><td>' + use + '</td></tr>';
+    });
+    document.querySelector('#buybox tbody').innerHTML = rows;
+
+    try {
+      var state = {};
+      ids.forEach(function (id) { state[id] = document.getElementById(id).value; });
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  document.getElementById('calc').addEventListener('input', render);
+  document.getElementById('calc').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.getElementById('reset').addEventListener('click', function () {
+    ids.forEach(function (id) { document.getElementById(id).value = defaults[id]; });
+    render();
+  });
+  render();
+})();
+</script>

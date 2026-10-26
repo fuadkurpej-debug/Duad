@@ -1,0 +1,29 @@
+{%- comment -%}
+  Prints the brand to show for a product (escaped), or nothing.
+  - The product metafield custom.brand always wins, so you can name the real maker.
+  - Otherwise the vendor, unless it is a supplier platform listed in
+    Theme settings → Product cards → "Hidden vendor names", or the store's own default vendor.
+  Supplier apps often set the vendor to their own name, which is not the maker.
+  Params: product, vendor (optional, e.g. a cart item's vendor)
+{%- endcomment -%}
+{%- liquid
+  assign brand = product.metafields.custom.brand.value | strip
+  if brand == blank
+    assign brand = vendor | default: product.vendor | strip
+    assign brand_down = brand | downcase
+    assign hidden_names = settings.vendor_hidden | newline_to_br | replace: '<br />', ',' | downcase | split: ','
+    for hidden_name in hidden_names
+      assign hidden_name = hidden_name | strip
+      if hidden_name != blank and brand_down == hidden_name
+        assign brand = ''
+        break
+      endif
+    endfor
+    assign shop_down = shop.name | downcase | strip
+    assign own_down = settings.own_brand_vendor | downcase | strip
+    if brand_down == shop_down and brand_down != own_down
+      assign brand = ''
+    endif
+  endif
+  echo brand | escape
+-%}

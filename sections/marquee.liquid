@@ -1,0 +1,103 @@
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    <li class="marquee__item" {{ block.shopify_attributes }}>
+      <span>{{ block.settings.text | escape }}</span>
+      {%- render 'icon', icon: section.settings.separator -%}
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+  <div
+    class="marquee{% if section.settings.style == 'sans' %} marquee--sans{% endif %}{% if section.settings.reverse %} marquee--reverse{% endif %} color-{{ section.settings.color_scheme }}"
+    style="--marquee-duration: {{ section.settings.duration }}s;"
+  >
+    <div class="marquee__track">
+      <ul class="marquee__group" role="list">{{ items }}</ul>
+      <ul class="marquee__group" role="list" aria-hidden="true">{{ items }}</ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Scrolling text",
+  "tag": "div",
+  "class": "marquee-section",
+  "max_blocks": 10,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Text style",
+      "options": [
+        { "value": "serif", "label": "Italic serif" },
+        { "value": "sans", "label": "Small caps" }
+      ],
+      "default": "serif"
+    },
+    {
+      "type": "select",
+      "id": "separator",
+      "label": "Separator",
+      "options": [
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "flower", "label": "Flower" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "drop", "label": "Drop" }
+      ],
+      "default": "sparkle"
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "min": 15,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "label": "Loop duration",
+      "default": 45
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse",
+      "label": "Scroll in reverse",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Skin, softly considered"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling text",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Skin, softly considered" } },
+        { "type": "item", "settings": { "text": "Cleanse · Treat · Moisturize" } },
+        { "type": "item", "settings": { "text": "Curated formulas & our own essentials" } },
+        { "type": "item", "settings": { "text": "Chosen for texture & feel" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

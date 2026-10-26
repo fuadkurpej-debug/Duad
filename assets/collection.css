@@ -1,0 +1,105 @@
+/* ==========================================================================
+   Skin & Beauty — collection, search & filters
+   ========================================================================== */
+
+/* Collection hero */
+.collection-hero { padding-block: clamp(2rem, 1.5rem + 2.5vw, 4rem); }
+.collection-hero .breadcrumbs { margin-bottom: 1rem; }
+.collection-hero__inner { display: grid; gap: 1.75rem; align-items: center; }
+.collection-hero__title { margin: 0; }
+.collection-hero__description { margin-top: 1rem; max-width: 40rem; color: rgba(var(--color-text), 0.78); }
+.collection-hero__media { aspect-ratio: 16 / 9; }
+@media (min-width: 990px) {
+  .collection-hero--with-image .collection-hero__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
+  .collection-hero__media { aspect-ratio: 3 / 2; }
+}
+
+/* Toolbar */
+.facets-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--color-text), 0.1);
+}
+.facets-toolbar__start { display: flex; align-items: center; gap: 1rem; }
+.facets-toolbar__count { margin: 0; font-size: 0.82rem; color: rgba(var(--color-text), 0.7); }
+.facets-toggle .icon { width: 1.05rem; height: 1.05rem; }
+.facets-sort { display: flex; align-items: center; gap: 0.6rem; }
+.facets-sort__label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(var(--color-text), 0.7); white-space: nowrap; }
+.facets-sort .select__select { min-height: 2.6rem; padding-block: 0.45rem; border-radius: 999px; font-size: 0.88rem; }
+@media (max-width: 749px) {
+  .facets-sort__label { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .facets-toolbar__count { display: none; }
+}
+
+.active-facets { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.active-facets:not(:empty) { margin-bottom: 1.5rem; }
+.active-facets .chip { gap: 0.5rem; }
+.active-facets .chip .icon { width: 0.8rem; height: 0.8rem; }
+.active-facets__clear { margin-left: 0.5rem; }
+
+/* Filter form */
+.facets-form .accordion > summary { min-height: 3.25rem; }
+.facet__selected { font-weight: var(--font-body-weight); letter-spacing: 0.04em; color: rgba(var(--color-text), 0.74); margin-left: 0.25rem; }
+.facet__list { display: grid; gap: 0.15rem; list-style: none; margin: 0; padding: 0; max-height: 18rem; overflow-y: auto; }
+.facet__option { display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 2.5rem; font-size: 0.92rem; }
+.facet__option.is-disabled { opacity: 0.45; cursor: not-allowed; }
+.facet__label { flex: 1; }
+.facet__count { font-size: 0.75rem; color: rgba(var(--color-text), 0.74); }
+.facet__swatch { width: 1.1rem; height: 1.1rem; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+.facet__price { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.facet__price .field__input { min-height: 2.8rem; }
+.facet__hint { margin: 0.75rem 0 0; font-size: 0.78rem; color: rgba(var(--color-text), 0.74); }
+.facets-drawer__footer { display: grid; grid-template-columns: 1fr 1.4fr; gap: 0.6rem; }
+.facets-drawer__footer .button { padding-inline: 1rem; }
+
+/* Sidebar layout (desktop) */
+@media (min-width: 990px) {
+  .facets-layout--sidebar {
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+    column-gap: 3rem;
+    align-items: start;
+  }
+  .facets-layout--sidebar > facet-filters { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: calc(var(--header-height) + 1.5rem); max-height: calc(100vh - var(--header-height) - 3rem); overflow-y: auto; scrollbar-width: thin; }
+  .facets-layout--sidebar > .facets-toolbar,
+  .facets-layout--sidebar > .active-facets,
+  .facets-layout--sidebar > .product-grid-container { grid-column: 2; }
+  .facets-layout--no-filters { display: block; }
+
+  .facets-drawer--sidebar.drawer { position: static; visibility: visible; pointer-events: auto; transition: none; z-index: auto; }
+  .facets-drawer--sidebar .drawer__overlay,
+  .facets-drawer--sidebar .drawer__header,
+  .facets-drawer--sidebar .drawer__footer { display: none; }
+  .facets-drawer--sidebar .drawer__panel { position: static; width: auto; transform: none; box-shadow: none; background: transparent; }
+  .facets-drawer--sidebar .drawer__body { overflow: visible; padding: 0; }
+  .facets-toggle--sidebar { display: none; }
+}
+
+/* Grid */
+.product-grid-container { transition: opacity 0.25s var(--ease); }
+.product-grid-container.is-loading { opacity: 0.4; pointer-events: none; }
+.collection-empty { display: grid; justify-items: center; gap: 0.75rem; padding: 4rem 1rem; text-align: center; }
+.collection-empty .h3 { margin: 0; }
+.collection-empty--curating { max-width: 34rem; margin-inline: auto; padding-block: clamp(3rem, 2rem + 5vw, 6rem); }
+.collection-empty__icon { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: 0.5rem; border-radius: 50%; background: rgba(var(--color-accent), 0.12); color: rgb(var(--color-accent)); }
+.collection-empty__icon .icon { width: 1.25rem; height: 1.25rem; }
+.collection-empty--curating .button-group { justify-content: center; align-items: center; gap: 1.25rem; margin-top: 0.75rem; }
+
+/* Collection list */
+.collection-list { --cols-desktop: 3; }
+.collection-list .category-card__title { font-size: calc(var(--heading-scale) * clamp(1.35rem, 1.2rem + 0.6vw, 1.8rem)); }
+
+/* Search page */
+.search-hero { padding-block: clamp(2.5rem, 2rem + 3vw, 5rem) 1.5rem; text-align: center; }
+.search-hero .search-form { max-width: 40rem; margin: 1.5rem auto 0; }
+.search-hero .search-form__input { text-align: left; }
+.search-hero__count { margin-top: 1rem; color: rgba(var(--color-text), 0.7); font-size: 0.9rem; }
+.search-result-card { display: grid; align-content: start; gap: 0.6rem; height: 100%; padding: 1.5rem; border-radius: var(--radius-card); background: rgb(var(--color-card)); border: 1px solid rgba(var(--color-text), 0.07); text-decoration: none; color: inherit; }
+.search-result-card__type { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(var(--color-text), 0.74); }
+.search-result-card__title { margin: 0; font-family: var(--font-heading-family); font-size: 1.35rem; line-height: 1.2; }
+.search-result-card__text { margin: 0; font-size: 0.88rem; color: rgba(var(--color-text), 0.72); }

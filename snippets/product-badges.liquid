@@ -1,0 +1,45 @@
+{%- comment -%}
+  Honest product badges — every badge is derived from real product data:
+  - Sold out: real availability
+  - Sale: compare-at price higher than price
+  - Bestseller / New: product tags the merchant applies
+  - Own line: vendor matches the own-brand vendor name
+  Params: product, max (default 2), class
+{%- endcomment -%}
+{%- liquid
+  assign limit = max | default: 2
+  assign shown = 0
+  assign tags_down = product.tags | join: '||' | downcase | split: '||'
+  assign bestseller_tag = settings.badge_bestseller_tag | downcase | strip
+  assign new_tag = settings.badge_new_tag | downcase | strip
+  assign own_vendor = settings.own_brand_vendor | downcase | strip
+  assign vendor_down = product.vendor | downcase | strip
+-%}
+<div class="{{ class | default: 'card__badges' }}">
+  {%- if product.available == false -%}
+    <span class="badge badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+    {%- assign shown = shown | plus: 1 -%}
+  {%- elsif settings.badge_sale_show and product.compare_at_price > product.price -%}
+    {%- if settings.badge_sale_style == 'percent' -%}
+      {%- assign saving = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | floor -%}
+      <span class="badge badge--sale">{{ 'products.product.save_percent' | t: percent: saving }}</span>
+    {%- else -%}
+      <span class="badge badge--sale">{{ 'products.product.on_sale' | t }}</span>
+    {%- endif -%}
+    {%- assign shown = shown | plus: 1 -%}
+  {%- endif -%}
+
+  {%- if shown < limit and bestseller_tag != blank and tags_down contains bestseller_tag -%}
+    <span class="badge">{{ 'products.product.bestseller' | t }}</span>
+    {%- assign shown = shown | plus: 1 -%}
+  {%- endif -%}
+
+  {%- if shown < limit and new_tag != blank and tags_down contains new_tag -%}
+    <span class="badge">{{ 'products.product.new' | t }}</span>
+    {%- assign shown = shown | plus: 1 -%}
+  {%- endif -%}
+
+  {%- if shown < limit and settings.badge_own_show and own_vendor != blank and vendor_down == own_vendor -%}
+    <span class="badge badge--own">{{ settings.badge_own_label | escape }}</span>
+  {%- endif -%}
+</div>

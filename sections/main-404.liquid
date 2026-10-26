@@ -1,0 +1,32 @@
+<div class="color-{{ section.settings.color_scheme }}">
+  <div class="page-width page-width--narrow empty-state">
+    <span class="empty-state__mark" aria-hidden="true">404</span>
+    <h1 class="h1">{{ 'templates.404.title' | t }}</h1>
+    <p>{{ 'templates.404.subtext' | t }}</p>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <label for="NotFoundSearch" class="visually-hidden">{{ 'general.search.label' | t }}</label>
+      <input id="NotFoundSearch" class="search-form__input" type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}">
+      <button type="submit" class="icon-button search-form__submit" aria-label="{{ 'general.search.submit' | t }}">{% render 'icon', icon: 'search' %}</button>
+    </form>
+    <div class="button-group button-group--center gap-top">
+      <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'general.shop_all' | t }}</a>
+      <a href="{{ routes.root_url }}" class="button button--secondary">{{ 'general.home' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "section",
+  "class": "main-404-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,134 @@
+{%- assign brand_text = settings.brand_name | default: shop.name -%}
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="{%- for scheme in settings.color_schemes limit: 1 -%}{{ scheme.settings.background }}{%- endfor -%}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- unless settings.type_body_font.system? and settings.type_heading_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+    {%- endif -%}
+
+    {%- liquid
+      # page_title and page_description can arrive already HTML-escaped (sometimes twice), so decode &amp; before escaping exactly once
+      assign brand_escaped = brand_text | escape
+      assign shop_escaped = shop.name | escape
+      assign title_text = page_title | replace: '&amp;', '&' | replace: '&amp;', '&' | escape_once
+      # Until the store itself is renamed, show the brand name wherever Shopify falls back to the store name
+      if title_text == shop_escaped
+        assign title_text = brand_escaped
+        # Homepage without its own title in Online Store → Preferences: brand plus a descriptive line for search results
+        if request.page_type == 'index' and settings.home_title != blank
+          assign home_title = settings.home_title | escape
+          assign title_text = brand_escaped | append: ' | ' | append: home_title
+        endif
+      endif
+      # Shopify's automatic all-products collection is titled "Products"
+      if request.page_type == 'collection' and collection.handle == 'all' and title_text == 'Products'
+        assign title_text = 'general.shop_all' | t
+      endif
+      # Shopify sends an empty title for some pages, such as searches filtered by type
+      if title_text == blank
+        if request.page_type == 'search' and search.performed
+          assign title_text = 'general.search.results_for' | t: terms: search.terms | escape_once
+        elsif request.page_type == 'search'
+          assign title_text = 'general.search.title' | t
+        else
+          assign title_text = brand_escaped
+        endif
+      endif
+      assign meta_description = page_description | default: settings.seo_description | replace: '&amp;', '&' | replace: '&amp;', '&' | strip_newlines | escape_once
+    -%}
+    <title>
+      {{- title_text -}}
+      {%- if current_tags -%}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}
+      {%- endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless title_text contains brand_escaped %} &ndash; {{ brand_escaped }}{% endunless -%}
+    </title>
+
+    {%- if meta_description != blank -%}
+      <meta name="description" content="{{ meta_description }}">
+    {%- endif -%}
+
+    {%- render 'meta-tags' -%}
+
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.type_heading_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_heading_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- render 'theme-styles' -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      {%- if settings.animations_reveal %}
+      if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        document.documentElement.classList.add('motion-ok');
+      }
+      {%- endif %}
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name | handle }}{% if template.suffix != blank %} template-{{ template.name | handle }}--{{ template.suffix | handle }}{% endif %}{% if settings.animations_hover %} hover-effects{% endif %}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="main-content" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+      {%- render 'cart-drawer' -%}
+    {%- endif -%}
+
+    {%- render 'search-modal' -%}
+
+    <div class="toast" id="ThemeToast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      window.theme = {
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          cartAdd: {{ routes.cart_add_url | json }},
+          cartChange: {{ routes.cart_change_url | json }},
+          cartUpdate: {{ routes.cart_update_url | json }},
+          predictiveSearch: {{ routes.predictive_search_url | json }},
+          productRecommendations: {{ routes.product_recommendations_url | json }}
+        },
+        cartType: {{ settings.cart_type | json }},
+        designMode: {{ request.design_mode | json }},
+        strings: {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          adding: {{ 'products.product.adding' | t | json }},
+          added: {{ 'products.product.added' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }},
+          cartError: {{ 'cart.error' | t | json }},
+          linkCopied: {{ 'general.social.link_copied' | t | json }},
+          loading: {{ 'accessibility.loading' | t | json }}
+        }
+      };
+    </script>
+  </body>
+</html>

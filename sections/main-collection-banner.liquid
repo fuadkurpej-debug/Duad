@@ -1,0 +1,61 @@
+{%- liquid
+  assign show_image = false
+  if section.settings.show_image and collection.image
+    assign show_image = true
+  endif
+-%}
+<div class="collection-hero color-{{ section.settings.color_scheme }}{% if show_image %} collection-hero--with-image{% endif %}">
+  <div class="page-width collection-hero__inner">
+    <div class="collection-hero__content">
+      {%- if section.settings.show_breadcrumbs -%}
+        {%- render 'breadcrumbs' -%}
+      {%- endif -%}
+      {%- assign collection_title = collection.title | escape -%}
+      {%- if collection.handle == 'all' and collection.title == 'Products' -%}{%- assign collection_title = 'general.shop_all' | t -%}{%- endif -%}
+      <h1 class="collection-hero__title h1">{{ collection_title }}</h1>
+      {%- if section.settings.show_description and collection.description != blank -%}
+        <div class="collection-hero__description rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+    {%- if show_image -%}
+      <div class="collection-hero__media media">
+        {%- assign alt = collection.image.alt | default: collection.title | escape -%}
+        {{ collection.image | image_url: width: 1400 | image_tag: widths: '500, 750, 1000, 1400', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'eager', fetchpriority: 'high', alt: alt }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "section",
+  "class": "collection-banner-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ]
+}
+{% endschema %}

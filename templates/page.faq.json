@@ -1,0 +1,194 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "style": "default",
+        "show_title": true,
+        "eyebrow": "Help centre",
+        "title_alignment": "center",
+        "show_updated": false,
+        "width": "narrow",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 16
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "g-orders": {
+          "type": "group",
+          "settings": {
+            "heading": "Orders & shipping"
+          }
+        },
+        "q-arrive": {
+          "type": "question",
+          "settings": {
+            "question": "When will my order arrive?",
+            "answer": "<p>Delivery depends on where you are and where each product ships from. Shipping options and costs are shown at checkout before you pay, and your order confirmation email includes a link to follow your order.</p>"
+          }
+        },
+        "q-countries": {
+          "type": "question",
+          "settings": {
+            "question": "Which countries do you ship to?",
+            "answer": "<p>The destinations available to you are shown at checkout when you enter your address.</p>"
+          }
+        },
+        "q-parcels": {
+          "type": "question",
+          "settings": {
+            "question": "Why did my order arrive in more than one parcel?",
+            "answer": "<p>Our products ship from different partner warehouses, so an order with several items can arrive in separate parcels.</p>"
+          }
+        },
+        "q-change": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change or cancel my order?",
+            "answer": "<p>Write to us as soon as possible with your order number and we'll let you know what's possible.</p>"
+          }
+        },
+        "g-returns": {
+          "type": "group",
+          "settings": {
+            "heading": "Returns & refunds"
+          },
+          "disabled": true
+        },
+        "q-policy": {
+          "type": "question",
+          "settings": {
+            "question": "What is your returns policy?",
+            "answer": "<p>You can return unopened products within [30] days of delivery. Full details are in our refund policy and on our Shipping &amp; Returns page.</p>"
+          },
+          "disabled": true
+        },
+        "q-start": {
+          "type": "question",
+          "settings": {
+            "question": "How do I start a return?",
+            "answer": "<p>Contact us with your order number and the items you'd like to return. We'll reply with the return address and next steps.</p>"
+          },
+          "disabled": true
+        },
+        "q-refund": {
+          "type": "question",
+          "settings": {
+            "question": "When will I receive my refund?",
+            "answer": "<p>Refunds are issued to your original payment method once we've received and checked your return. Your bank may need a few additional days to process it.</p>"
+          },
+          "disabled": true
+        },
+        "g-products": {
+          "type": "group",
+          "settings": {
+            "heading": "Products & ingredients"
+          }
+        },
+        "q-maker": {
+          "type": "question",
+          "settings": {
+            "question": "How do you choose your products?",
+            "answer": "<p>Every product is chosen for how it feels to use, how clearly it is described and the place it can earn in a simple routine. When a product comes from a named brand, you'll see the brand on the product page.</p>"
+          }
+        },
+        "q-ingredients": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I find the full ingredient list?",
+            "answer": "<p>Where the manufacturer provides it, the full ingredient list (INCI) is in the Ingredients section of the product page. If a list is missing or unclear, write to us before you order. If you have allergies or sensitivities, always check the list and patch-test first.</p>"
+          }
+        },
+        "q-skin": {
+          "type": "question",
+          "settings": {
+            "question": "Which products suit my skin type?",
+            "answer": "<p>Look for the \"Suitable for\" details on each product page, or write to us — we're happy to help you build a routine. For skin conditions, please consult a dermatologist.</p>"
+          }
+        },
+        "g-payment": {
+          "type": "group",
+          "settings": {
+            "heading": "Payment & account"
+          }
+        },
+        "q-payment": {
+          "type": "question",
+          "settings": {
+            "question": "Which payment methods do you accept?",
+            "answer": "<p>All available payment methods are shown at checkout. Payments are processed securely through Shopify's encrypted checkout — we never see or store your full card details.</p>"
+          }
+        },
+        "q-account": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need an account to order?",
+            "answer": "<p>No — you can check out as a guest. An account simply makes it easier to follow your orders and save your addresses.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "g-orders",
+        "q-arrive",
+        "q-countries",
+        "q-parcels",
+        "q-change",
+        "g-returns",
+        "q-policy",
+        "q-start",
+        "q-refund",
+        "g-products",
+        "q-maker",
+        "q-ingredients",
+        "q-skin",
+        "g-payment",
+        "q-payment",
+        "q-account"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "button_label": "",
+        "layout": "stacked",
+        "structured_data": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
+        "padding_bottom": 64
+      }
+    },
+    "contact-cta": {
+      "type": "rich-text",
+      "settings": {
+        "eyebrow": "Still curious?",
+        "heading": "We'd love to <em>hear from you</em>",
+        "heading_size": "h2",
+        "text": "<p>Can't find what you're looking for? Our team is happy to help with orders, products and routines.</p>",
+        "button_label": "Contact us",
+        "button_link": "/pages/contact",
+        "button_style": "primary",
+        "alignment": "center",
+        "width": "narrow",
+        "color_scheme": "scheme-3",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "contact-cta"
+  ]
+}

@@ -1,0 +1,246 @@
+{%- liquid
+  assign ritual_ids = ''
+  assign ritual_total = 0
+  assign ritual_count = 0
+  for block in section.blocks
+    assign step_product = block.settings.product
+    if step_product != blank and step_product.available
+      assign step_variant = step_product.selected_or_first_available_variant
+      if ritual_ids != ''
+        assign ritual_ids = ritual_ids | append: ','
+      endif
+      assign ritual_ids = ritual_ids | append: step_variant.id
+      assign ritual_total = ritual_total | plus: step_variant.price
+      assign ritual_count = ritual_count | plus: 1
+    endif
+  endfor
+-%}
+<div class="section color-{{ section.settings.color_scheme }}" style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;">
+  <div class="page-width">
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      text: section.settings.text,
+      align: 'center'
+    -%}
+
+    <ol class="ritual__steps" style="--steps: {{ section.blocks.size | at_most: 4 }};" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign step_product = block.settings.product -%}
+        <li class="ritual-step" {{ block.shopify_attributes }} data-reveal style="--reveal-order: {{ forloop.index0 }};">
+          <div class="ritual-step__head">
+            <span class="ritual-step__number" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <div>
+              {%- if block.settings.label != blank -%}
+                <p class="ritual-step__label">{{ block.settings.label | escape }}</p>
+              {%- endif -%}
+              <h3 class="ritual-step__title">{{ block.settings.title | escape }}</h3>
+            </div>
+          </div>
+          {%- if block.settings.text != blank -%}
+            <div class="ritual-step__text">{{ block.settings.text }}</div>
+          {%- endif -%}
+
+          {%- if step_product != blank -%}
+            <div class="ritual-step__product">
+              <a href="{{ step_product.url }}" class="ritual-step__media" tabindex="-1" aria-hidden="true">
+                {%- if step_product.featured_media -%}
+                  {{ step_product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy', widths: '200, 400, 600, 800', sizes: '(min-width: 990px) 28vw, 6rem', alt: '' }}
+                {%- else -%}
+                  {%- render 'placeholder-product', product: step_product -%}
+                {%- endif -%}
+              </a>
+              <div class="ritual-step__product-info">
+                {%- if settings.card_show_vendor -%}
+                  {%- capture display_vendor -%}{%- render 'product-vendor', product: step_product -%}{%- endcapture -%}
+                  {%- if display_vendor != blank -%}
+                    <p class="card__vendor">{{ display_vendor }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+                <p class="ritual-step__product-title"><a href="{{ step_product.url }}">{{ step_product.title | escape }}</a></p>
+                <div class="ritual-step__product-row">
+                  {%- render 'price', product: step_product, show_unit: false -%}
+                  {%- if step_product.available -%}
+                    {%- if step_product.has_only_default_variant or step_product.variants.size == 1 -%}
+                      <button
+                        type="button"
+                        class="mini-product__add"
+                        data-add-variants="{{ step_product.selected_or_first_available_variant.id }}"
+                        aria-label="{{ 'products.product.quick_add_to' | t: title: step_product.title | escape }}"
+                      >
+                        {%- render 'icon', icon: 'plus' -%}
+                      </button>
+                    {%- else -%}
+                      <a href="{{ step_product.url }}" class="mini-product__add" aria-label="{{ 'products.product.choose_options_for' | t: title: step_product.title | escape }}">
+                        {%- render 'icon', icon: 'arrow-right' -%}
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- elsif block.settings.image != blank -%}
+            <div class="ritual-step__product">
+              <div class="ritual-step__media">
+                {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '200, 400, 600, 800', sizes: '(min-width: 990px) 28vw, 6rem', alt: '' }}
+              </div>
+            </div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+
+    {%- if section.settings.show_add_all and ritual_count > 1 -%}
+      <div class="ritual__footer">
+        <button type="button" class="button button--large" data-add-variants="{{ ritual_ids }}">
+          {%- render 'icon', icon: 'bag' -%}
+          <span>{{ section.settings.add_all_label | escape }} &middot; {{ ritual_total | money }}</span>
+        </button>
+        <p class="ritual__footer-note">{{ 'sections.ritual.add_all_note' | t: count: ritual_count }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Skincare ritual",
+  "tag": "section",
+  "class": "ritual-section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "The ritual"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Three steps to your <em>best skin days</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>A simple, considered routine — morning and evening. Pick one product for each step, or add the whole ritual at once.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_all",
+      "label": "Show \"add the full ritual\" button",
+      "default": true,
+      "info": "Adds the first available option of every step product. The total shown is the sum of current prices."
+    },
+    {
+      "type": "text",
+      "id": "add_all_label",
+      "label": "Button label",
+      "default": "Add the full ritual"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 104
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Morning & evening"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Cleanse"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Describe this step of the routine.</p>"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Shown when no product is selected."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Skincare ritual",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "label": "Step one",
+            "title": "Cleanse",
+            "text": "<p>Begin with a clean canvas. A gentle cleanse lifts away the day so every step that follows can do its work.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "Step two",
+            "title": "Treat",
+            "text": "<p>Layer a serum chosen for what your skin needs right now — a few drops, pressed in with warm hands.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "Step three",
+            "title": "Moisturize",
+            "text": "<p>Finish with a moisturizer that keeps skin feeling soft and comfortable from morning to night.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

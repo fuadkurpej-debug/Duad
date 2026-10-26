@@ -1,0 +1,49 @@
+{%- liquid
+  # page_title and page_description can arrive already HTML-escaped (sometimes twice), so decode &amp; before escaping exactly once
+  assign brand_text = settings.brand_name | default: shop.name
+  assign brand_escaped = brand_text | escape
+  assign shop_escaped = shop.name | escape
+  assign og_title = page_title | default: brand_text | replace: '&amp;', '&' | replace: '&amp;', '&' | escape_once
+  if og_title == shop_escaped
+    assign og_title = brand_escaped
+    # Same homepage title as the browser tab (see layout/theme.liquid)
+    if request.page_type == 'index' and settings.home_title != blank
+      assign home_title = settings.home_title | escape
+      assign og_title = brand_escaped | append: ' | ' | append: home_title
+    endif
+  endif
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  assign og_description = page_description | default: shop.description | default: settings.seo_description | default: brand_text | replace: '&amp;', '&' | replace: '&amp;', '&' | strip_newlines | escape_once
+
+  if request.page_type == 'product'
+    assign og_type = 'product'
+  elsif request.page_type == 'article'
+    assign og_type = 'article'
+  elsif request.page_type == 'password'
+    assign og_url = request.origin
+  endif
+-%}
+
+<meta property="og:site_name" content="{{ brand_escaped }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ og_description }}">
+
+{%- assign share_image = page_image | default: settings.social_image -%}
+{%- if share_image -%}
+  <meta property="og:image" content="http:{{ share_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ share_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="{{ 1200 | divided_by: share_image.aspect_ratio | round }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title }}">
+<meta name="twitter:description" content="{{ og_description }}">
